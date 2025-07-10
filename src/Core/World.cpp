@@ -2,10 +2,16 @@
 
 #include "Entity.hpp"
 #include "INavigationService.hpp"
+#include <memory>
 
 World::World(int w, int h) :
 		_navGrid(w, h)
 {}
+
+std::shared_ptr<World> World::create(int w, int h)
+{
+    return createInternal(w,h);
+}
 
 EntityHandle World::createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params)
 {

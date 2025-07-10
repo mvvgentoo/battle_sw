@@ -12,6 +12,7 @@
 #include <list>
 #include <map>
 #include <vector>
+#include <memory>
 
 class Grid
 {
@@ -51,7 +52,12 @@ class World : public std::enable_shared_from_this<World>
 public:
 	using Predicate = std::function<bool(const std::unique_ptr<Entity>& entity, Position start)>;
 
-	World(int w, int h);
+    static std::shared_ptr<World> create(int w, int h);
+
+    World(const World&) = delete;
+    World(World&&) = delete;
+    World& operator=(const World&) = delete;
+    World& operator=(World&&) = delete;
 
 	EntityHandle createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params);
 
@@ -85,6 +91,18 @@ public:
 
 	std::vector<EntityHandle> allEntities() const;
 	std::vector<EntityHandle> allEntitiesIf(std::function<bool(const std::unique_ptr<Entity>& e)> condition) const;
+
+private:
+    World(int w, int h);
+
+    template<typename ...Arg>
+    std::shared_ptr<World> static createInternal(Arg&&...arg)
+    {
+        struct EnableMakeShared : public World {
+            EnableMakeShared(Arg&&...arg) :World(std::forward<Arg>(arg)...) {}
+        };
+        return std::make_shared<EnableMakeShared>(std::forward<Arg>(arg)...);
+    }
 
 private:
 	Grid _navGrid;

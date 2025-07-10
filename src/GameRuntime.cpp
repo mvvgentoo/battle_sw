@@ -61,8 +61,8 @@ void GameRuntime::registerCommands()
 	_parser
 		.add<io::CreateMap>(
 			[&](const io::CreateMap& cmd)
-			{
-				_world = std::make_shared<World>(cmd.width, cmd.height);
+            {
+                _world = World::create(cmd.width, cmd.height);
 				const int swordmanMeleeRange = 1;
 				const int swordsmanDefaultHP = 5;
 				const int swordsmanDefaultStrength = 2;
