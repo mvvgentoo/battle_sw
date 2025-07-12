@@ -8,14 +8,16 @@
 #include <vector>
 
 class World;
+class HealthComponent;
 
 class HealthService : public IGameService
 {
 public:
 	using hp_amount = int;
 
-	HealthService(hp_amount startHP, EntityID _owner, std::weak_ptr<World> _world);
+    HealthService(EntityID _owner, std::weak_ptr<World> _world, std::shared_ptr<HealthComponent> hpdata);
 	virtual ~HealthService();
+
 	HealthService(const HealthService&) = delete;
 	HealthService(HealthService&&) = delete;
 	HealthService& operator=(const HealthService&) = delete;
@@ -27,13 +29,14 @@ public:
 	bool applyDamage(hp_amount amount);
 	bool applyHeal(hp_amount amount);
 
-	virtual void update() override;
+    ITurnBehavior::TurnStatus update() override;
 
 private:
-	hp_amount _hp;
-	hp_amount _maxHP;
-	EntityID _owner;
+    EntityID _owner;
 	std::weak_ptr<World> _world;
+    std::shared_ptr<HealthComponent> _healthData;
+
+    void markDead();
 };
 
 #endif	// HEALTHSERVICE_HPP

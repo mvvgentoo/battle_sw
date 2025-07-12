@@ -6,7 +6,7 @@
 #include <memory>
 
 //#include "NavigationTask.hpp"
-#include "EntityHandle.hpp"
+#include "Core/Entity/EntityHandle.hpp"
 
 #include <list>
 
@@ -30,6 +30,8 @@ public:
 		return _owner;
 	}
 
+    ITurnBehavior::TurnStatus update();
+
 private:
 	EntityHandle _owner;
 	std::weak_ptr<World> _world;
@@ -40,7 +42,7 @@ private:
 	// IGameService interface
 
 public:
-	void update();
+
 };
 
 #endif	// INAVIGATIONSERVICE_HPP

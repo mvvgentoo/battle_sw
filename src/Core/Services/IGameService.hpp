@@ -1,7 +1,8 @@
 #ifndef IGAMESERVICE_HPP
 #define IGAMESERVICE_HPP
 
-#include "ComponentHandler.hpp"
+#include "Core/ComponentHandler.hpp"
+#include "Core/ITurnBehaviour.hpp"
 
 #include <memory>
 #include <typeindex>
@@ -17,7 +18,7 @@ public:
 
 	IGameService();
 	virtual ~IGameService();
-	virtual void update() = 0;
+    virtual ITurnBehavior::TurnStatus update() = 0;
 
 	template <typename Base, typename T>
 	bool addComponent(std::shared_ptr<T> component)
