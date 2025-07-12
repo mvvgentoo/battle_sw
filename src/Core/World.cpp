@@ -31,7 +31,7 @@ EntityHandle World::addToWorld(std::unique_ptr<Entity> entity, Position pos)
 	CellFlag cellOccupyType = CellFlag::OCCUPY;
 	if (auto&& navSrv = entity->getServiceByType<NavigationService>())
 	{
-		cellOccupyType = navSrv->getCellOccupyType();
+        //cellOccupyType = navSrv->getCellOccupyType();
 	}
 
 	_units.emplace(id, std::move(entity));

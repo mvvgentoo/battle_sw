@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "Core/BaseTypes.hpp"
-#include "Core/ITargetSelectorStrategy.hpp"
+#include "Core/FightSystem/ITargetSelectorStrategy.hpp"
 
 struct MeleeAttackData : public IDataComponent
 {

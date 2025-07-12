@@ -5,30 +5,32 @@
 
 #include <memory>
 
-//#include "NavigationTask.hpp"
 #include "Core/Entity/EntityHandle.hpp"
 
 #include <list>
 
 class World;
-class NavigationTask;
+class INavigationTask;
+class IMovementBehavior;
+
 
 class NavigationService : public IGameService
 {
 public:
+    enum class NavTaskStatus
+    {
+        Exists,
+        NewAssigned,
+        NoTask
+    };
+
+
 	NavigationService(std::shared_ptr<World> world, EntityHandle owner);
 	~NavigationService();
 
-	CellFlag getCellOccupyType() const;
-	bool moveTo();
-	void addNavTask(std::unique_ptr<NavigationTask> navTask);
-	void setCurrentNavTask();
+    void addNavTask(std::unique_ptr<INavigationTask> navTask);
+    NavTaskStatus setCurrentNavTask();
 	bool hasCurrentNavTask();
-
-	EntityHandle getOwnerID() const
-	{
-		return _owner;
-	}
 
     ITurnBehavior::TurnStatus update();
 
@@ -36,12 +38,9 @@ private:
 	EntityHandle _owner;
 	std::weak_ptr<World> _world;
 
-	std::list<std::unique_ptr<NavigationTask>> _navTasks;
-	std::unique_ptr<NavigationTask> _currentTask;
-
-	// IGameService interface
-
-public:
+    std::list<std::unique_ptr<INavigationTask>> _navTasks;
+    std::unique_ptr<INavigationTask> _currentTask;
+    std::shared_ptr<IMovementBehavior> _moveBehavior;
 
 };
 

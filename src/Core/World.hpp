@@ -5,7 +5,7 @@
 #include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
 #include "EntiyBuilder.hpp"
-#include "EventBus.hpp"
+#include "Core/Systems/EventBus.hpp"
 
 #include <cstdlib>
 #include <functional>

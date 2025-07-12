@@ -1,9 +1,9 @@
 #ifndef NAVIGATIONTASK_HPP
 #define NAVIGATIONTASK_HPP
 
-#include "BaseTypes.hpp"
+#include "INavigationTask.hpp"
 
-class NavigationTask
+class NavigationTask : public INavigationTask
 {
 public:
 	explicit NavigationTask(Position target, uint32_t reachDistance);

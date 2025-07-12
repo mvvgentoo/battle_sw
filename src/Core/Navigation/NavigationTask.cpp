@@ -1,6 +1,6 @@
 #include "NavigationTask.hpp"
 
-#include "World.hpp"
+#include "Core/World.hpp"
 
 NavigationTask::NavigationTask(Position target, uint32_t reachDistance) :
 		_target(target),
