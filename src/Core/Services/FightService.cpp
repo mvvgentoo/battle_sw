@@ -29,18 +29,28 @@ ITurnBehavior::TurnStatus FightService::update()
 
     for (const auto& behavior : _behaviors)
     {
-        const World& world = *worldPtr;
-        if (behavior == nullptr || !behavior->canBeActivated(world, _owner))
+        const auto& entityManager = worldPtr->getEntityManager();
+        if (behavior == nullptr || !behavior->canBeActivated(entityManager, _owner))
         {
             continue;
         }
 
-        if(auto targets = behavior->findTargets(world, _owner); !targets.empty() )
+        if(auto targets = behavior->findTargets(entityManager, _owner); !targets.empty() )
         {
-            behavior->execute(_owner, targets, world.getCombatSystem());
+            behavior->execute(_owner, targets, worldPtr->getCombatSystem());
             return ITurnBehavior::TurnStatus::SUCCESS;
         }
     }
 
     return ITurnBehavior::TurnStatus::IDLE;
+}
+
+int FightService::getPriority()
+{
+    return _priority;
+}
+
+void FightService::setPriority(int priority)
+{
+    _priority = priority;
 }

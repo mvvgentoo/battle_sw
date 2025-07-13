@@ -62,11 +62,6 @@ bool NavGridSystem::isOccupied(const Position& pos) const
 	return _gridOccupied[pos.y * getWidth() + pos.x] != 0;
 }
 
-uint32_t NavGridSystem::chebyshevDistance(const Position &a, const Position &b)
-{
-    return std::max((a.x > b.x ? a.x - b.x : b.x - a.x), (a.y > b.y ? a.y - b.y : b.y - a.y));
-}
-
 int NavGridSystem::getHeight() const
 {
     return _h;

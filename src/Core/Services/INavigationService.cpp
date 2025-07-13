@@ -84,3 +84,13 @@ void NavigationService::addNavTask(std::unique_ptr<INavigationTask> navTask)
 {
 	_navTasks.push_back(std::move(navTask));
 }
+
+int NavigationService::getPriority()
+{
+    return _priority;
+}
+
+void NavigationService::setPriority(int priority)
+{
+    _priority = priority;
+}

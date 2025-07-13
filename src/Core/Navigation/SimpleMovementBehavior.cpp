@@ -72,7 +72,7 @@ IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(Position curren
                     continue;
                 }
 
-                auto dist = Grid::chebyshevDistance(candidate, target);
+                auto dist = chebyshevDistance(candidate, target);
                 if (dist < bestDistance)
                 {
                     next = candidate;

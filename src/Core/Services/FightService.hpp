@@ -30,7 +30,13 @@ private:
 	std::weak_ptr<World> _world;
     std::vector<std::shared_ptr<IAttackBehavior>> _behaviors;
 
+    int _priority = 100;
     //std::vector<EntityID> findTargetsFrom(const std::shared_ptr<IFightComponent>& component) const;
+
+    // IGameService interface
+public:
+    int getPriority() override;
+    void setPriority(int priority) override;
 };
 
 #endif	// FIGHTSERVICE_HPP

@@ -1,4 +1,5 @@
 #include "EntityFactoryRegistry.hpp"
+#include "EntityFactory.hpp"
 
 void EntityFactoryRegistry::registerFactory(const std::string &name, std::unique_ptr<EntityFactory> factory)
 {

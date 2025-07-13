@@ -54,7 +54,7 @@ bool MovementComponent::executeNavigation(Position& current, const Position& tar
 					continue;
 				}
 
-				auto dist = Grid::chebyshevDistance(candidate, target);
+                auto dist = chebyshevDistance(candidate, target);
 				if (dist < bestDistance)
 				{
 					next = candidate;

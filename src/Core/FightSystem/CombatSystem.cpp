@@ -18,7 +18,8 @@ void CombatSystem::dealDamageNow(const DamageEvent &evt)
 {
     if (auto world = _world.lock())
     {
-        if (auto targetEntity = world->getEntityByID(evt.target).lock())
+        const auto& entityManager = world->getEntityManager();
+        if (auto targetEntity = entityManager.getEntityByID(evt.target).lock())
         {
             if (auto healthSrv = targetEntity->getServiceByType<HealthService>() )
             {

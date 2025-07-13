@@ -63,3 +63,13 @@ void HealthService::markDead()
         }
     }
 }
+
+int HealthService::getPriority()
+{
+    return _priority;
+}
+
+void HealthService::setPriority(int priority)
+{
+    _priority = priority;
+}

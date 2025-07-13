@@ -4,8 +4,6 @@
 #include <memory>
 #include "Core/FightSystem/IAttackBehavior.hpp"
 #include "Core/DataComponents/RangeAttackData.hpp"
-
-#include "Core/World.hpp"
 #include "Core/FightSystem/CombatSystem.hpp"
 
 class RangeAttackBehavior : public IAttackBehavior
@@ -15,28 +13,10 @@ public:
     virtual ~RangeAttackBehavior() = default;
 
     int getPriority() const override;
+    bool canBeActivated(const EntityManager&, EntityID) const override;
 
-    bool canBeActivated(const World&, EntityID) const override {
-        return true; // всегда можно
-    }
-
-    std::vector<EntityID> findTargets(const World& world, EntityID self) const override {
-        const Position& pos = world.getEntityByID(self).lock()->getPosition();
-        return _data->targetSelector->selectTargets
-        (
-                world.getNeighboursInRadius(pos, [rMin = _data->rangeMin, rMax = _data->rangeMax](const auto& entity, Position pos)
-                                            {
-                                                auto dist = Grid::chebyshevDistance(pos, entity->getPosition());
-                                                return entity && entity->isAlive() && dist <= rMax && dist >= rMin;
-            })
-        );
-    }
-
-    void execute(EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combat) const override {
-        for (auto id : targets) {
-            combat.dealDamageNow({ attacker, id, _data->agility });
-        }
-    }
+    std::vector<EntityID> findTargets(const EntityManager& entityManager, EntityID self) const override;
+    void execute(EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combat) const override;
 
 private:
     std::shared_ptr<RangeAttackData> _data;

@@ -6,16 +6,11 @@ DefaultTurnBehavior::DefaultTurnBehavior() {}
 
 DefaultTurnBehavior::~DefaultTurnBehavior() {}
 
-void DefaultTurnBehavior::addAction(std::unique_ptr<IBhvAction> action)
-{
-
-}
-
 ITurnBehavior::TurnStatus DefaultTurnBehavior::makeTurn(std::weak_ptr<World> world, EntityID owner)
 {
 	if (auto worldPtr = world.lock())
 	{
-		auto entity = worldPtr->getEntityByID(owner);
+        auto entity = worldPtr->getEntityManager().getEntityByID(owner);
 		auto entityPtr = entity.lock();
 		if (!entityPtr || !entityPtr->isAlive())
 		{

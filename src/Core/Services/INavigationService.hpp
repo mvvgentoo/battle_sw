@@ -32,7 +32,7 @@ public:
     NavTaskStatus setCurrentNavTask();
 	bool hasCurrentNavTask();
 
-    ITurnBehavior::TurnStatus update();
+    ITurnBehavior::TurnStatus update() override;
 
 private:
 	EntityHandle _owner;
@@ -41,7 +41,13 @@ private:
     std::list<std::unique_ptr<INavigationTask>> _navTasks;
     std::unique_ptr<INavigationTask> _currentTask;
     std::shared_ptr<IMovementBehavior> _moveBehavior;
+    int _priority = 50;
 
+
+    // IGameService interface
+public:
+    int getPriority() override;
+    void setPriority(int priority) override;
 };
 
 #endif	// INAVIGATIONSERVICE_HPP

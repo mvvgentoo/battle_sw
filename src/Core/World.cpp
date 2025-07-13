@@ -1,7 +1,6 @@
 #include "World.hpp"
 
 #include "Core/Entity/Entity.hpp"
-#include "Core/Services/INavigationService.hpp"
 #include <memory>
 
 World::World(int w, int h)
@@ -21,6 +20,36 @@ EntityHandle World::createEntity(const std::string& name, EntityID id, Position 
     auto entity = _entityManager->createEntity(name, id, pos, params, shared_from_this());
     updateEntityPosition(entity.getId(), pos);
     return entity;
+}
+
+const NavGridSystem &World::getGrid() const
+{
+    return *_navGrid;
+}
+
+NavGridSystem &World::getGrid()
+{
+    return *_navGrid;
+}
+
+const EntityManager &World::getEntityManager() const
+{
+    return *_entityManager;
+}
+
+EntityManager &World::getEntityManager()
+{
+    return *_entityManager;
+}
+
+const CombatSystem &World::getCombatSystem() const
+{
+    return *_combatSystem;
+}
+
+CombatSystem &World::getCombatSystem()
+{
+    return *_combatSystem;
 }
 
 bool World::updateEntityPosition(EntityID id, const Position& pos)
@@ -48,13 +77,5 @@ void World::setEventBus(std::shared_ptr<EventBus> bus)
 	_eventBus = std::move(bus);
 }
 
-void World::setStep(uint64_t step)
-{
-	_currentStep = step;
-}
 
-uint64_t World::getStep() const
-{
-	return _currentStep;
-}
 

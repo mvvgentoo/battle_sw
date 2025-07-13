@@ -1,7 +1,9 @@
 #ifndef BASETYPES_HPP
 #define BASETYPES_HPP
 
+#include <algorithm>
 #include <cstdint>
+
 
 struct Position
 {
@@ -24,6 +26,12 @@ enum CellFlag
 	OCCUPY,
 	SHARE
 };
+
+uint32_t chebyshevDistance(const Position &a, const Position &b)
+{
+    return std::max((a.x > b.x ? a.x - b.x : b.x - a.x), (a.y > b.y ? a.y - b.y : b.y - a.y));
+}
+
 
 using EntityID = uint32_t;
 

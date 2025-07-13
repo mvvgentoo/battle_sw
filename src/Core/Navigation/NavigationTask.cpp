@@ -1,6 +1,5 @@
 #include "NavigationTask.hpp"
 
-#include "Core/Systems/NavGridSystem.hpp"
 
 NavigationTask::NavigationTask(Position target, uint32_t reachDistance) :
 		_target(target),
@@ -9,5 +8,5 @@ NavigationTask::NavigationTask(Position target, uint32_t reachDistance) :
 
 bool NavigationTask::isReached(const Position& current) const
 {
-    return NavGridSystem::chebyshevDistance(current, _target) < _reachDistance;
+    return chebyshevDistance(current, _target) < _reachDistance;
 }

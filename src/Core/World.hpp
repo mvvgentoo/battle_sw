@@ -4,9 +4,11 @@
 #include "BaseTypes.hpp"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
+#include "Core/IWorldContext.hpp"
 #include "Core/Systems/EntityManager.hpp"
 #include "Core/Systems/EventBus.hpp"
 #include "Core/Systems/NavGridSystem.hpp"
+#include "Core/FightSystem/CombatSystem.hpp"
 
 
 #include <cstdlib>
@@ -17,7 +19,7 @@
 #include <memory>
 
 
-class World : public std::enable_shared_from_this<World>
+class World : public std::enable_shared_from_this<World>, public IWorldContext
 {
 	friend class EntityHandle;
 
@@ -31,15 +33,17 @@ public:
 
 	EntityHandle createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params);
 
-    const NavGridSystem& getGrid() const
-	{
-        return *_navGrid;
-	}
+    const NavGridSystem& getGrid() const;
 
-    NavGridSystem& getGrid()
-    {
-        return *_navGrid;
-    }
+    NavGridSystem& getGrid();
+
+    const EntityManager& getEntityManager() const;
+
+    EntityManager& getEntityManager();
+
+    const CombatSystem& getCombatSystem() const;
+
+    CombatSystem& getCombatSystem();
 
 	void setEventBus(std::shared_ptr<EventBus> bus);
 
@@ -74,6 +78,7 @@ private:
     std::shared_ptr<NavGridSystem> _navGrid;
     std::weak_ptr<EventBus> _eventBus;
     std::shared_ptr<EntityManager> _entityManager;
+    std::shared_ptr<CombatSystem> _combatSystem;
 
 	EntityHandle addToWorld(std::unique_ptr<Entity> entity, Position pos);
 

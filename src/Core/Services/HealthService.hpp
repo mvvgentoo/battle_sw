@@ -35,8 +35,14 @@ private:
     EntityID _owner;
 	std::weak_ptr<World> _world;
     std::shared_ptr<HealthComponent> _healthData;
+    int _priority = 0;
 
     void markDead();
+
+    // IGameService interface
+public:
+    int getPriority() override;
+    void setPriority(int priority) override;
 };
 
 #endif	// HEALTHSERVICE_HPP
