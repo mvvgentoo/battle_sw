@@ -4,8 +4,10 @@
 #include "BaseTypes.hpp"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
-#include "EntiyBuilder.hpp"
+#include "Core/Systems/EntityManager.hpp"
 #include "Core/Systems/EventBus.hpp"
+#include "Core/Systems/NavGridSystem.hpp"
+
 
 #include <cstdlib>
 #include <functional>
@@ -14,44 +16,12 @@
 #include <vector>
 #include <memory>
 
-class Grid
-{
-public:
-	Grid(int w, int h);
-
-	int getHeight() const
-	{
-		return _h;
-	}
-
-	int getWidth() const
-	{
-		return _w;
-	}
-
-	void updatePosition(EntityID id, Position old_pos, Position new_pos, CellFlag flag);
-	bool inBounds(const Position& pos) const;
-	bool isOccupied(const Position& pos) const;
-
-	static uint32_t chebyshevDistance(const Position& a, const Position& b)
-	{
-		return std::max((a.x > b.x ? a.x - b.x : b.x - a.x), (a.y > b.y ? a.y - b.y : b.y - a.y));
-	}
-
-private:
-	int _w, _h;
-	//std::vector<std::vector<std::pair<EntityID, CellFlag>>> _grid;
-	std::vector<EntityID> _gridOccupied;
-	std::vector<std::list<EntityID>> _gridShared;
-};
 
 class World : public std::enable_shared_from_this<World>
 {
 	friend class EntityHandle;
 
 public:
-	using Predicate = std::function<bool(const std::unique_ptr<Entity>& entity, Position start)>;
-
     static std::shared_ptr<World> create(int w, int h);
 
     World(const World&) = delete;
@@ -61,23 +31,19 @@ public:
 
 	EntityHandle createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params);
 
-    std::vector<EntityID> getNeighboursInRadius(Position startPoint, Predicate condition) const;
-	EntityHandle getEntityByID(EntityID id) const;
-
-	void registerFactory(const std::string& name, std::unique_ptr<EntityFactory> factory);
-
-	const Grid& getGrid() const
+    const NavGridSystem& getGrid() const
 	{
-		return _navGrid;
+        return *_navGrid;
 	}
 
-	bool updateEntityPosition(EntityID id, const Position& pos);
-	bool updateEntityPosition(EntityHandle entityHandle, const Position& pos);
+    NavGridSystem& getGrid()
+    {
+        return *_navGrid;
+    }
 
 	void setEventBus(std::shared_ptr<EventBus> bus);
 
-	void setStep(uint64_t step);
-
+    void setStep(uint64_t step);
 	uint64_t getStep() const;
 
 	template <typename Event>
@@ -89,8 +55,8 @@ public:
 		}
 	}
 
-	std::vector<EntityHandle> allEntities() const;
-	std::vector<EntityHandle> allEntitiesIf(std::function<bool(const std::unique_ptr<Entity>& e)> condition) const;
+    bool updateEntityPosition(EntityID id, const Position& pos);
+    bool updateEntityPosition(EntityHandle entityHandle, const Position& pos);
 
 private:
     World(int w, int h);
@@ -105,18 +71,12 @@ private:
     }
 
 private:
-	Grid _navGrid;
-	std::map<EntityID, std::unique_ptr<Entity>> _units;
-	//TODO: better to use more complex structure and preserve order in addToWorld
-	//std::unordered_map<EntityID, std::unique_ptr<Entity>> _units;
-	//std::vector<EntityID> _unitsOrder;
-
-	EntityBuilder _entityBuilder;
+    std::shared_ptr<NavGridSystem> _navGrid;
+    std::weak_ptr<EventBus> _eventBus;
+    std::shared_ptr<EntityManager> _entityManager;
 
 	EntityHandle addToWorld(std::unique_ptr<Entity> entity, Position pos);
-	Entity* getRawEntity(EntityID id) const;
 
-	std::weak_ptr<EventBus> _eventBus;
 	uint64_t _currentStep = 0;
 };
 

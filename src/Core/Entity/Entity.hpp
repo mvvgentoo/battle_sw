@@ -19,8 +19,9 @@ public:
 	using IGameServicePtr = std::unique_ptr<IGameService>;
 
 	Entity(EntityID id, Position pos, std::unique_ptr<ITurnBehavior> strategy);
-	~Entity();
-	EntityID getID() const;
+    ~Entity();
+
+    EntityID getID() const;
 	const Position& getPosition() const;
 	void setPosition(const Position& pos);
 

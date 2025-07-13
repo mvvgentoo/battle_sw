@@ -1,9 +1,8 @@
 #include "Entity.hpp"
 
-#include "FightService.hpp"
-#include "HealthService.hpp"
-#include "ITurnBehaviour.hpp"
-#include "World.hpp"
+#include "Core/ITurnBehaviour.hpp"
+#include "Core/World.hpp"
+#include "Core/Services/HealthService.hpp"
 
 Entity::Entity(EntityID id, Position pos, std::unique_ptr<ITurnBehavior> strategy) :
 		_id(id),

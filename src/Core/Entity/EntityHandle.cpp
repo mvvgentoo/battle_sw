@@ -1,39 +1,33 @@
 #include "EntityHandle.hpp"
+#include "Core/Systems/EntityManager.hpp"
 
-#include "World.hpp"
-
-EntityHandle::EntityHandle() :
-		_world(),
-		_id(0)
+EntityHandle::EntityHandle() : _entityManager(), _id(0)
 {}
 
-EntityHandle::EntityHandle(std::weak_ptr<const World> world, EntityID id) :
-		_world(world),
-		_id(id)
+EntityHandle::EntityHandle(std::weak_ptr<const EntityManager> entityManager, EntityID id) : _entityManager(entityManager), _id(id)
 {}
 
 EntityHandle::~EntityHandle() {}
 
-EntityID EntityHandle::getId()
+EntityID EntityHandle::getId() const
 {
 	return _id;
 }
 
 Entity* EntityHandle::lock()
 {
-	if (auto w = _world.lock())
+    if (auto em = _entityManager.lock())
 	{
-		return w->getRawEntity(_id);
+        return em->resolveHandle(*this);
 	}
 	return nullptr;
 }
 
 bool EntityHandle::isValid() const
 {
-	if (auto w = _world.lock())
-	{
-		auto entity = w->getRawEntity(_id);
-		return entity != nullptr && entity->isAlive();
+    if (auto  em = _entityManager.lock())
+    {
+        return em->isValid(*this);
 	}
 	return false;
 }

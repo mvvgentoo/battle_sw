@@ -1,0 +1,62 @@
+#ifndef ENTITYMANAGER_HPP
+#define ENTITYMANAGER_HPP
+
+#include <map>
+#include <memory>
+#include "Core/BaseTypes.hpp"
+#include "Core/Entity/Entity.hpp"
+#include "Core/Entity/EntityHandle.hpp"
+#include "Core/Factory/EntityFactoryRegistry.hpp"
+#include "Core/Factory/UnitParams.hpp"
+
+class EntityFactory;
+
+class EntityManager : public std::enable_shared_from_this<EntityManager>
+{
+public:
+    using Predicate = std::function<bool(const std::unique_ptr<Entity>& entity, Position start)>;
+
+    static std::shared_ptr<EntityManager> create();
+
+    EntityManager(const EntityManager&) = delete;
+    EntityManager(EntityManager&&) = delete;
+    EntityManager& operator=(const EntityManager&) = delete;
+    EntityManager& operator=(EntityManager&&) = delete;
+
+    ~EntityManager();
+
+    EntityHandle createEntity(const std::string &name, EntityID id, const Position& pos, const UnitParams& params, std::shared_ptr<World> sharedWorld);
+    EntityHandle getEntityByID(EntityID id) const;
+    Entity* resolveHandle(EntityHandle entityHandle) const;
+
+    std::vector<EntityID> getNeighboursInRadius(Position startPoint, Predicate condition) const;
+
+    bool updateEntityPosition(EntityID id, const Position& pos);
+    bool updateEntityPosition(EntityHandle entityHandle, const Position& pos);
+    bool isValid(EntityHandle entityHandle) const;
+
+    EntityFactoryRegistry& getEntityFactoryRegistry();
+    const EntityFactoryRegistry& getEntityFactoryRegistry() const;
+
+private:
+    std::map<EntityID, std::unique_ptr<Entity>> _units;
+    //TODO: better to use more complex structure and preserve order in addToWorld
+    //std::unordered_map<EntityID, std::unique_ptr<Entity>> _units;
+    //std::vector<EntityID> _unitsOrder;
+    EntityFactoryRegistry _factoryRegistry;
+
+
+    EntityManager();
+
+    template<typename ...Arg>
+    std::shared_ptr<EntityManager> static createInternal(Arg&&...arg)
+    {
+        struct EnableMakeShared : public EntityManager {
+            EnableMakeShared(Arg&&...arg) :EntityManager(std::forward<Arg>(arg)...) {}
+        };
+        return std::make_shared<EnableMakeShared>(std::forward<Arg>(arg)...);
+    }
+
+};
+
+#endif // ENTITYMANAGER_HPP
