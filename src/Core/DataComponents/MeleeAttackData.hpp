@@ -2,7 +2,7 @@
 #define MELEEATTACKDATA_HPP
 
 #include <memory>
-#include "Core/BaseTypes.hpp"
+#include "IDataComponent.hpp"
 #include "Core/FightSystem/ITargetSelectorStrategy.hpp"
 
 struct MeleeAttackData : public IDataComponent

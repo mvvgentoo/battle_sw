@@ -1,7 +1,7 @@
 #ifndef ITURNSTRATEGY_H
 #define ITURNSTRATEGY_H
 
-#include "BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 #include <functional>
 #include <memory>

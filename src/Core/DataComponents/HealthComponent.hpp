@@ -1,7 +1,7 @@
 #ifndef HEALTHCOMPONENT_HPP
 #define HEALTHCOMPONENT_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "IDataComponent.hpp"
 
 struct HealthComponent : public IDataComponent
 {

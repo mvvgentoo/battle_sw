@@ -1,7 +1,7 @@
 #ifndef ITARGETSELECTORSTRATEGY_HPP
 #define ITARGETSELECTORSTRATEGY_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 #include <vector>
 

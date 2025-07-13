@@ -3,7 +3,7 @@
 
 #include <map>
 #include <memory>
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
 #include "Core/Factory/EntityFactoryRegistry.hpp"

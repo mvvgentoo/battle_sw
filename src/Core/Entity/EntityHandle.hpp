@@ -1,7 +1,7 @@
 #ifndef ENTITYHANDLE_H
 #define ENTITYHANDLE_H
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include "Entity.hpp"
 
 class EntityManager;

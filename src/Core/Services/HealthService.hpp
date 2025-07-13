@@ -1,7 +1,7 @@
 #ifndef HEALTHSERVICE_HPP
 #define HEALTHSERVICE_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include "IGameService.hpp"
 
 #include <string>

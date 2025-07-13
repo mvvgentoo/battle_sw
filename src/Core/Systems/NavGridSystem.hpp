@@ -1,7 +1,7 @@
 #ifndef NAVGRID_HPP
 #define NAVGRID_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include <list>
 #include <vector>
 

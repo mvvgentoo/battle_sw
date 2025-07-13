@@ -1,9 +1,9 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Core/BaseTypes.hpp"
-#include "Core/ComponentHandler.hpp"
-#include "Core/ITurnBehaviour.hpp"
+#include "Core/Utils/BaseTypes.hpp"
+#include "Core/Utils/ComponentHandler.hpp"
+#include "Core/AI/ITurnBehaviour.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -11,6 +11,7 @@
 #include <vector>
 
 class IGameService;
+class IDataComponent;
 class World;
 
 class Entity

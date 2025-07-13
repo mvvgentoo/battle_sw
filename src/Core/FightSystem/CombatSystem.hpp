@@ -2,7 +2,7 @@
 #define COMBATSYSTEM_HPP
 
 #include <memory>
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 class World;
 

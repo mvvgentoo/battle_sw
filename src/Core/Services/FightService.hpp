@@ -1,7 +1,7 @@
 #ifndef FIGHTSERVICE_HPP
 #define FIGHTSERVICE_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include "Core/Entity/EntityHandle.hpp"
 #include "IGameService.hpp"
 

@@ -1,7 +1,7 @@
 #ifndef IMOVEMENTBEHAVIOR_HPP
 #define IMOVEMENTBEHAVIOR_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 class World;
 

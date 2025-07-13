@@ -2,7 +2,7 @@
 #define IATTACKBEHAVIOR_HPP
 
 #include <vector>
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 class EntityManager;
 class CombatSystem;

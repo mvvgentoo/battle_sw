@@ -1,7 +1,7 @@
 #ifndef ENTITYFACTORY_HPP
 #define ENTITYFACTORY_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 #include "UnitParams.hpp"
 
 #include <functional>

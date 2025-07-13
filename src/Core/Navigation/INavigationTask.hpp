@@ -1,7 +1,7 @@
 #ifndef INAVIGATIONTASK_HPP
 #define INAVIGATIONTASK_HPP
 
-#include "Core/BaseTypes.hpp"
+#include "Core/Utils/BaseTypes.hpp"
 
 class INavigationTask
 {

@@ -1,7 +1,7 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "BaseTypes.hpp"
+#include "Core/Utils/Core/Utils/BaseTypes.hpp"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
 #include "Core/IWorldContext.hpp"

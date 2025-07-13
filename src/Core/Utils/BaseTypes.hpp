@@ -35,9 +35,4 @@ uint32_t chebyshevDistance(const Position &a, const Position &b)
 
 using EntityID = uint32_t;
 
-struct IDataComponent
-{
-    virtual ~IDataComponent() = default;
-};
-
 #endif	// BASETYPES_HPP

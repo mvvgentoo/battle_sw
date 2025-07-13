@@ -2,7 +2,7 @@
 #define MOVEMENTDATA_HPP
 
 #include <memory>
-#include "Core/BaseTypes.hpp"
+#include "IDataComponent.hpp"
 
 struct MovementData : public IDataComponent
 {
