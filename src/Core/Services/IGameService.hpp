@@ -1,7 +1,7 @@
 #ifndef IGAMESERVICE_HPP
 #define IGAMESERVICE_HPP
 
-#include "Core/ITurnBehaviour.hpp"
+#include "Core/AI/ITurnBehaviour.hpp"
 
 #include <memory>
 #include <typeindex>

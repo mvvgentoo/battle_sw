@@ -1,5 +1,6 @@
 #include "EntityManager.hpp"
 #include "Core/Factory/EntityFactory.hpp"
+#include "Core/World/IWorldContext.hpp"
 
 EntityManager::EntityManager()
 {
@@ -11,7 +12,7 @@ EntityManager::~EntityManager()
 
 }
 
-EntityHandle EntityManager::createEntity(const std::string& name, EntityID id, const Position &pos, const UnitParams &params, std::shared_ptr<World> sharedWorld)
+EntityHandle EntityManager::createEntity(const std::string& name, EntityID id, const Position &pos, const UnitParams &params, std::shared_ptr<IWorldContext> sharedWorldCtx)
 {
     const EntityFactory* factory = getEntityFactoryRegistry().getFactory(name);
     if (!factory)
@@ -19,7 +20,7 @@ EntityHandle EntityManager::createEntity(const std::string& name, EntityID id, c
         return EntityHandle();
     }
 
-    std::unique_ptr<Entity> entity = factory->create(sharedWorld, id, pos, params);
+    std::unique_ptr<Entity> entity = factory->create(sharedWorldCtx, id, pos, params);
     if (!entity)
     {
         return EntityHandle();

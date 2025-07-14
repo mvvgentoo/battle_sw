@@ -1,12 +1,13 @@
 #include "HealthService.hpp"
 
 #include "IO/Events/UnitDied.hpp"
-#include "Core/World.hpp"
+#include "Core/World/IWorldContext.hpp"
 #include "Core/DataComponents/HealthComponent.hpp"
+#include "Core/Systems/EventManager.hpp"
 
-HealthService::HealthService(EntityID owner, std::weak_ptr<World> world, std::shared_ptr<HealthComponent> healthData) :
+HealthService::HealthService(EntityID owner, std::weak_ptr<IWorldContext> worldContext, std::shared_ptr<HealthComponent> healthData) :
 		_owner(owner),
-        _world(world),
+        _worldContext(worldContext),
         _healthData(healthData)
 {}
 
@@ -58,8 +59,8 @@ void HealthService::markDead()
     if (_healthData && !_healthData->isDead) {
         _healthData->isDead = true;
 
-        if (auto world = _world.lock()) {
-            world->emit(sw::io::UnitDied{_owner});
+        if (auto worldCtx = _worldContext.lock()) {
+            worldCtx->getEventManager().emit(sw::io::UnitDied{_owner});
         }
     }
 }

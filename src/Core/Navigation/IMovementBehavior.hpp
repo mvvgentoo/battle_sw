@@ -3,7 +3,7 @@
 
 #include "Core/Utils/BaseTypes.hpp"
 
-class World;
+class IWorldContext;
 
 class IMovementBehavior
 {
@@ -18,7 +18,7 @@ public:
 
     virtual ~IMovementBehavior() = default;
 
-    virtual MovementResult moveTo(Position current, const Position& target, EntityID id, World& world) = 0;
+    virtual MovementResult moveTo(Position current, const Position& target, EntityID id, IWorldContext& world) = 0;
 };
 
 #endif

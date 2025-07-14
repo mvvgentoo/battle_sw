@@ -9,7 +9,7 @@
 
 #include <list>
 
-class World;
+class IWorldContext;
 class INavigationTask;
 class IMovementBehavior;
 
@@ -25,7 +25,7 @@ public:
     };
 
 
-	NavigationService(std::shared_ptr<World> world, EntityHandle owner);
+    NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner);
 	~NavigationService();
 
     void addNavTask(std::unique_ptr<INavigationTask> navTask);
@@ -36,7 +36,7 @@ public:
 
 private:
 	EntityHandle _owner;
-	std::weak_ptr<World> _world;
+    std::weak_ptr<IWorldContext> _worldContext;
 
     std::list<std::unique_ptr<INavigationTask>> _navTasks;
     std::unique_ptr<INavigationTask> _currentTask;

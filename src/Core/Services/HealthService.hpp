@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-class World;
+class IWorldContext;
 class HealthComponent;
 
 class HealthService : public IGameService
@@ -15,7 +15,7 @@ class HealthService : public IGameService
 public:
 	using hp_amount = int;
 
-    HealthService(EntityID _owner, std::weak_ptr<World> _world, std::shared_ptr<HealthComponent> hpdata);
+    HealthService(EntityID _owner, std::weak_ptr<IWorldContext> worldContext, std::shared_ptr<HealthComponent> hpdata);
 	virtual ~HealthService();
 
 	HealthService(const HealthService&) = delete;
@@ -33,7 +33,7 @@ public:
 
 private:
     EntityID _owner;
-	std::weak_ptr<World> _world;
+    std::weak_ptr<IWorldContext> _worldContext;
     std::shared_ptr<HealthComponent> _healthData;
     int _priority = 0;
 

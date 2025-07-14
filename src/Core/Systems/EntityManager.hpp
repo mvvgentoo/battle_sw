@@ -10,6 +10,7 @@
 #include "Core/Factory/UnitParams.hpp"
 
 class EntityFactory;
+class IWorldContext;
 
 class EntityManager : public std::enable_shared_from_this<EntityManager>
 {
@@ -25,7 +26,7 @@ public:
 
     ~EntityManager();
 
-    EntityHandle createEntity(const std::string &name, EntityID id, const Position& pos, const UnitParams& params, std::shared_ptr<World> sharedWorld);
+    EntityHandle createEntity(const std::string &name, EntityID id, const Position& pos, const UnitParams& params, std::shared_ptr<IWorldContext> sharedWorldCtx);
     EntityHandle getEntityByID(EntityID id) const;
     Entity* resolveHandle(EntityHandle entityHandle) const;
 

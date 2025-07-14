@@ -1,11 +1,11 @@
 #include "FightService.hpp"
 
-#include "Core/World.hpp"
+#include "Core/World/IWorldContext.hpp"
 #include "Core/FightSystem/IAttackBehavior.hpp"
 
-FightService::FightService(std::shared_ptr<World> world, EntityID owner) :
+FightService::FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner) :
 		_owner(owner),
-		_world(world)
+        _worldContext(worldContext)
 {}
 
 FightService::~FightService() {}
@@ -21,15 +21,15 @@ void FightService::addAttackBehavior(std::shared_ptr<IAttackBehavior> behavior)
 
 ITurnBehavior::TurnStatus FightService::update()
 {
-    auto worldPtr = _world.lock();
-    if (worldPtr == nullptr)
+    auto worldContext = _worldContext.lock();
+    if (worldContext == nullptr)
     {
         return ITurnBehavior::TurnStatus::INVALID;
     }
 
     for (const auto& behavior : _behaviors)
     {
-        const auto& entityManager = worldPtr->getEntityManager();
+        const auto& entityManager = worldContext->getEntityManager();
         if (behavior == nullptr || !behavior->canBeActivated(entityManager, _owner))
         {
             continue;
@@ -37,7 +37,7 @@ ITurnBehavior::TurnStatus FightService::update()
 
         if(auto targets = behavior->findTargets(entityManager, _owner); !targets.empty() )
         {
-            behavior->execute(_owner, targets, worldPtr->getCombatSystem());
+            behavior->execute(_owner, targets, worldContext->getCombatSystem());
             return ITurnBehavior::TurnStatus::SUCCESS;
         }
     }

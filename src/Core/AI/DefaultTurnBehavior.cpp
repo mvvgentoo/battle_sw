@@ -1,6 +1,6 @@
 #include "DefaultTurnBehavior.hpp"
-
-#include "World.hpp"
+#include "Core/World/World.hpp"
+#include "Core/Systems/EntityManager.hpp"
 
 DefaultTurnBehavior::DefaultTurnBehavior() {}
 

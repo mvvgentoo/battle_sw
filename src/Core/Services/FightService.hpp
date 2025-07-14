@@ -2,18 +2,17 @@
 #define FIGHTSERVICE_HPP
 
 #include "Core/Utils/BaseTypes.hpp"
-#include "Core/Entity/EntityHandle.hpp"
 #include "IGameService.hpp"
 
 #include <vector>
 
-class World;
+class IWorldContext;
 class IAttackBehavior;
 
 class FightService : public IGameService
 {
 public:
-	FightService(std::shared_ptr<World> world, EntityID owner);
+    FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner);
 	virtual ~FightService();
 
 	FightService(const FightService&) = delete;
@@ -27,7 +26,7 @@ public:
 
 private:
 	EntityID _owner;
-	std::weak_ptr<World> _world;
+    std::weak_ptr<IWorldContext> _worldContext;
     std::vector<std::shared_ptr<IAttackBehavior>> _behaviors;
 
     int _priority = 100;

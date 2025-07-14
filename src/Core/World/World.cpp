@@ -1,25 +1,28 @@
 #include "World.hpp"
 
-#include "Core/Entity/Entity.hpp"
+#include "Core/Systems/EntityManager.hpp"
+#include "Core/Systems/NavGridSystem.hpp"
+#include "Core/FightSystem/CombatSystem.hpp"
+#include "Core/Systems/EventManager.hpp"
+
 #include <memory>
 
-World::World(int w, int h)
+World::World(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
+             std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager) :
+    _navGrid(navGrid), _entityManager(entityManager), _combatSystem(combatSystem), _eventManager(eventManager)
 {
-    _navGrid = std::make_shared<NavGridSystem>(w,h);
-    _entityManager = EntityManager::create();
-    _eventBus = std::make_shared<EventBus>();
+
 }
 
-std::shared_ptr<World> World::create(int w, int h)
+std::shared_ptr<World> World::create(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
+                                     std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager)
 {
-    return createInternal(w,h);
-}
-
-EntityHandle World::createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params)
-{
-    auto entity = _entityManager->createEntity(name, id, pos, params, shared_from_this());
-    updateEntityPosition(entity.getId(), pos);
-    return entity;
+    auto result = createInternal(navGrid,entityManager, combatSystem, eventManager);
+    if(combatSystem)
+    {
+        combatSystem->setContext(result);
+    }
+    return result;
 }
 
 const NavGridSystem &World::getGrid() const
@@ -52,30 +55,8 @@ CombatSystem &World::getCombatSystem()
     return *_combatSystem;
 }
 
-bool World::updateEntityPosition(EntityID id, const Position& pos)
+std::shared_ptr<IWorldContext> World::getSharedContext()
 {
-    auto entityHandle = _entityManager->getEntityByID(id);
-    if (auto entity = entityHandle.lock())
-    {
-        CellFlag cellOccupyType = CellFlag::OCCUPY;
-        auto currentPos = entity->getPosition();
-        bool result = _entityManager->updateEntityPosition(id, pos);
-        result = result && getGrid().updatePosition(id, currentPos, pos, cellOccupyType);
-        return result;
-    }
-
-    return false;
+    return shared_from_this();
 }
-
-bool World::updateEntityPosition(EntityHandle entityHandle, const Position& pos)
-{
-	return updateEntityPosition(entityHandle.getId(), pos);
-}
-
-void World::setEventBus(std::shared_ptr<EventBus> bus)
-{
-	_eventBus = std::move(bus);
-}
-
-
 

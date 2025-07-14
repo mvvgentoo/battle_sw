@@ -1,8 +1,12 @@
 #include <limits>
 
+#include "Core/Systems/EventManager.hpp"
+#include "IO/Events/UnitMoved.hpp"
 #include "SimpleMovementBehavior.hpp"
 #include "Core/DataComponents/MovementData.hpp"
-#include "Core/World.hpp"
+#include "Core/World/IWorldContext.hpp"
+#include "Core/Systems/NavGridSystem.hpp"
+#include "Core/World/EntityHelper.hpp"
 
 struct Direction
 {
@@ -35,7 +39,7 @@ SimpleMovementBehavior::~SimpleMovementBehavior()
 
 }
 
-IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(Position current, const Position &target, EntityID id, World &world)
+IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(Position current, const Position &target, EntityID id, IWorldContext &worldCtx)
 {
     if (current == target)
     {
@@ -44,7 +48,7 @@ IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(Position curren
 
     auto from = current;
     int steps = _data->maxCellsPerTurn;
-    const auto& navGrid = world.getGrid();
+    const auto& navGrid = worldCtx.getGrid();
 
     for (int s = 0; s < steps; ++s)
     {
@@ -88,10 +92,10 @@ IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(Position curren
         }
 
         Position newPos{next.x, next.y};
-        world.updateEntityPosition(id, newPos);
+        EntityHelper::updateEntityPosition(worldCtx, id, newPos);
         current = newPos;
 
-        //world.emit(sw::io::UnitMoved{id, static_cast<uint32_t>(current.x), static_cast<uint32_t>(current.y)});
+        worldCtx.getEventManager().emit(sw::io::UnitMoved{id, static_cast<uint32_t>(current.x), static_cast<uint32_t>(current.y)});
 
         if (current == target)
         {

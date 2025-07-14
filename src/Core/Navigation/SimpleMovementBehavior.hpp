@@ -5,7 +5,7 @@
 #include "IMovementBehavior.hpp"
 
 
-class World;
+class IWorldContext;
 struct MovementData;
 
 class SimpleMovementBehavior : public IMovementBehavior
@@ -14,7 +14,7 @@ public:
     explicit SimpleMovementBehavior(std::shared_ptr<MovementData> _data);
     ~SimpleMovementBehavior();
 
-    MovementResult moveTo(Position current, const Position &target, EntityID id, World &world);
+    MovementResult moveTo(Position current, const Position &target, EntityID id, IWorldContext &world);
 
 private:
     std::shared_ptr<MovementData> _data;

@@ -1,10 +1,18 @@
 #include "CombatSystem.hpp"
-#include "Core/World.hpp"
+#include "Core/World/IWorldContext.hpp"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Services/HealthService.hpp"
 #include "IO/Events/UnitAttacked.hpp"
 
-CombatSystem::CombatSystem(std::shared_ptr<World> world) : _world(world)
+#include "Core/Systems/EntityManager.hpp"
+#include "Core/Systems/EventManager.hpp"
+
+CombatSystem::CombatSystem() : _worldContext()
+{
+
+}
+
+CombatSystem::CombatSystem(std::shared_ptr<IWorldContext> worldCtx) : _worldContext(worldCtx)
 {
 
 }
@@ -14,11 +22,16 @@ CombatSystem::~CombatSystem()
 
 }
 
+void CombatSystem::setContext(std::shared_ptr<IWorldContext> worldCtx)
+{
+    _worldContext = worldCtx;
+}
+
 void CombatSystem::dealDamageNow(const DamageEvent &evt)
 {
-    if (auto world = _world.lock())
+    if (auto worldCtx = _worldContext.lock())
     {
-        const auto& entityManager = world->getEntityManager();
+        const auto& entityManager = worldCtx->getEntityManager();
         if (auto targetEntity = entityManager.getEntityByID(evt.target).lock())
         {
             if (auto healthSrv = targetEntity->getServiceByType<HealthService>() )
@@ -26,7 +39,7 @@ void CombatSystem::dealDamageNow(const DamageEvent &evt)
                 int hpBefore = healthSrv->getCurrentHP();
                 healthSrv->applyDamage(evt.damage);
 
-                world->emit(sw::io::UnitAttacked{
+                worldCtx->getEventManager().emit(sw::io::UnitAttacked{
                     evt.attacker,
                     evt.target,
                     static_cast<uint32_t>(evt.damage),

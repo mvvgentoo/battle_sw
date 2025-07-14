@@ -1,15 +1,8 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "Core/Utils/Core/Utils/BaseTypes.hpp"
-#include "Core/Entity/Entity.hpp"
 #include "Core/Entity/EntityHandle.hpp"
-#include "Core/IWorldContext.hpp"
-#include "Core/Systems/EntityManager.hpp"
-#include "Core/Systems/EventBus.hpp"
-#include "Core/Systems/NavGridSystem.hpp"
-#include "Core/FightSystem/CombatSystem.hpp"
-
+#include "Core/World/IWorldContext.hpp"
 
 #include <cstdlib>
 #include <functional>
@@ -18,52 +11,41 @@
 #include <vector>
 #include <memory>
 
+class EventManager;
+class EntityManager;
+class CombatSystem;
+class NavGridSystem;
 
 class World : public std::enable_shared_from_this<World>, public IWorldContext
 {
 	friend class EntityHandle;
 
 public:
-    static std::shared_ptr<World> create(int w, int h);
+    static std::shared_ptr<World> create(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
+                                         std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager);
 
     World(const World&) = delete;
     World(World&&) = delete;
     World& operator=(const World&) = delete;
     World& operator=(World&&) = delete;
 
-	EntityHandle createEntity(const std::string& name, EntityID id, Position pos, const UnitParams& params);
+    const NavGridSystem& getGrid() const override;
+    NavGridSystem& getGrid() override;
 
-    const NavGridSystem& getGrid() const;
+    const EntityManager& getEntityManager() const override;
+    EntityManager& getEntityManager() override;
 
-    NavGridSystem& getGrid();
+    const CombatSystem& getCombatSystem() const override;
+    CombatSystem& getCombatSystem() override;
 
-    const EntityManager& getEntityManager() const;
+    const EventManager& getEventManager() const override;
+    EventManager& getEventManager() override;
 
-    EntityManager& getEntityManager();
-
-    const CombatSystem& getCombatSystem() const;
-
-    CombatSystem& getCombatSystem();
-
-	void setEventBus(std::shared_ptr<EventBus> bus);
-
-    void setStep(uint64_t step);
-	uint64_t getStep() const;
-
-	template <typename Event>
-	void emit(const Event& event) const
-	{
-		if (auto bus = _eventBus.lock())
-		{
-			bus->publish(getStep(), event);
-		}
-	}
-
-    bool updateEntityPosition(EntityID id, const Position& pos);
-    bool updateEntityPosition(EntityHandle entityHandle, const Position& pos);
+    std::shared_ptr<IWorldContext> getSharedContext() override;
 
 private:
-    World(int w, int h);
+    World(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
+                 std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager);
 
     template<typename ...Arg>
     std::shared_ptr<World> static createInternal(Arg&&...arg)
@@ -76,13 +58,9 @@ private:
 
 private:
     std::shared_ptr<NavGridSystem> _navGrid;
-    std::weak_ptr<EventBus> _eventBus;
+    std::shared_ptr<EventManager> _eventManager;
     std::shared_ptr<EntityManager> _entityManager;
-    std::shared_ptr<CombatSystem> _combatSystem;
-
-	EntityHandle addToWorld(std::unique_ptr<Entity> entity, Position pos);
-
-	uint64_t _currentStep = 0;
+    std::shared_ptr<CombatSystem> _combatSystem;	
 };
 
 #endif	// WORLD_HPP

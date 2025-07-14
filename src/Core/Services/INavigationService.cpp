@@ -1,14 +1,15 @@
 #include "INavigationService.hpp"
 
+#include "Core/Systems/EventManager.hpp"
 #include "IO/Events/MarchEnded.hpp"
 #include "Core/Navigation/IMovementBehavior.hpp"
 #include "Core/Navigation/INavigationTask.hpp"
-#include "Core/World.hpp"
+#include "Core/World/IWorldContext.hpp"
 #include "IO/Events/MarchStarted.hpp"
 #include "IO/Events/UnitMoved.hpp"
 
-NavigationService::NavigationService(std::shared_ptr<World> world, EntityHandle owner) :
-		_world(world),
+NavigationService::NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner) :
+        _worldContext(worldCtx),
 		_owner(owner)
 {}
 
@@ -16,8 +17,8 @@ NavigationService::~NavigationService() = default;
 
 ITurnBehavior::TurnStatus NavigationService::update()
 {
-    auto worldPtr = _world.lock();
-    if (worldPtr == nullptr)
+    auto worldCtx = _worldContext.lock();
+    if (worldCtx == nullptr)
     {
         return ITurnBehavior::TurnStatus::INVALID;
     }
@@ -33,20 +34,20 @@ ITurnBehavior::TurnStatus NavigationService::update()
 
             if (navTaskStatus == NavTaskStatus::NewAssigned)
             {
-                worldPtr->emit(sw::io::MarchStarted{_owner.getId(),
+                worldCtx->getEventManager().emit(sw::io::MarchStarted{_owner.getId(),
                                 static_cast<uint32_t>(currentPos.x), static_cast<uint32_t>(currentPos.y),
                                 static_cast<uint32_t>(targetPos.x), static_cast<uint32_t>(targetPos.y)}
                                );
             }
 
-            auto result = _moveBehavior->moveTo(currentPos, targetPos, entity->getID(), *worldPtr);
+            auto result = _moveBehavior->moveTo(currentPos, targetPos, entity->getID(), *worldCtx);
 
             if (result.wasSuccesful)
             {
-                worldPtr->emit(sw::io::UnitMoved{_owner.getId(), static_cast<uint32_t>(result.to.x), static_cast<uint32_t>(result.to.y)});
+                worldCtx->getEventManager().emit(sw::io::UnitMoved{_owner.getId(), static_cast<uint32_t>(result.to.x), static_cast<uint32_t>(result.to.y)});
                 if (result.targetReached || _currentTask->isReached(result.to) )
                 {
-                    worldPtr->emit(sw::io::MarchEnded{_owner.getId(), static_cast<uint32_t>(result.to.x), static_cast<uint32_t>(result.to.y)});
+                    worldCtx->getEventManager().emit(sw::io::MarchEnded{_owner.getId(), static_cast<uint32_t>(result.to.x), static_cast<uint32_t>(result.to.y)});
                     _currentTask.reset();
                 }
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include "Core/Utils/BaseTypes.hpp"
 
-class World;
+class IWorldContext;
 
 struct DamageEvent
 {
@@ -16,12 +16,15 @@ struct DamageEvent
 class CombatSystem
 {
 public:
-    CombatSystem(std::shared_ptr<World> world);
+    CombatSystem();
+    CombatSystem(std::shared_ptr<IWorldContext> worldCtx);
     ~CombatSystem();
+
+    void setContext(std::shared_ptr<IWorldContext> worldCtx);
 
     void dealDamageNow(const DamageEvent& evt);
 private:
-    std::weak_ptr<World> _world;
+    std::weak_ptr<IWorldContext> _worldContext;
 };
 
 
