@@ -5,10 +5,9 @@
 #include "Core/Services/HealthService.hpp"
 
 
-Entity::Entity(EntityID id, Position pos, std::unique_ptr<ITurnBehavior> strategy) :
+Entity::Entity(EntityID id, Position pos) :
 		_id(id),
-		_pos(pos),
-		_turnStrategy(std::move(strategy))
+        _pos(pos)
 {}
 
 Entity::~Entity() {}
@@ -45,10 +44,10 @@ bool Entity::isAlive() const
 		return healthSrv->isAlive();
 	}
 
-	return true;
+    return true;
 }
 
-ITurnBehavior::TurnStatus Entity::take_turn(std::weak_ptr<World> world)
+std::vector<std::shared_ptr<IGameService> > Entity::getAllServices() const
 {
-	return _turnStrategy->makeTurn(world, _id);
+    return _serviceHandler.getAllComponents();
 }

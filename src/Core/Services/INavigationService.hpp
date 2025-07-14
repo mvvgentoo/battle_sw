@@ -25,12 +25,12 @@ public:
     };
 
 
-    NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner);
+    NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv);
 	~NavigationService();
 
     void addNavTask(std::unique_ptr<INavigationTask> navTask);
     NavTaskStatus setCurrentNavTask();
-	bool hasCurrentNavTask();
+    bool hasCurrentNavTask();
 
     ITurnBehavior::TurnStatus update() override;
 
@@ -40,13 +40,11 @@ private:
 
     std::list<std::unique_ptr<INavigationTask>> _navTasks;
     std::unique_ptr<INavigationTask> _currentTask;
-    std::shared_ptr<IMovementBehavior> _moveBehavior;
+    std::unique_ptr<IMovementBehavior> _moveBehavior;
     int _priority = 50;
 
-
-    // IGameService interface
 public:
-    int getPriority() override;
+    int getPriority() const override;
     void setPriority(int priority) override;
 };
 

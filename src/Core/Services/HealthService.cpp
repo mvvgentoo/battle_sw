@@ -65,7 +65,7 @@ void HealthService::markDead()
     }
 }
 
-int HealthService::getPriority()
+int HealthService::getPriority() const
 {
     return _priority;
 }

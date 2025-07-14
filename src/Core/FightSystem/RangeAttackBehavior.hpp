@@ -1,5 +1,5 @@
-#ifndef MELEEATTACKBEHAVIOR_HPP
-#define MELEEATTACKBEHAVIOR_HPP
+#ifndef RANGEATTACKBEHAVIOR_HPP
+#define RANGEATTACKBEHAVIOR_HPP
 
 #include <memory>
 #include "Core/FightSystem/IAttackBehavior.hpp"
@@ -21,4 +21,4 @@ public:
 private:
     std::shared_ptr<RangeAttackData> _data;
 };
-#endif // MELEEATTACKBEHAVIOR_HPP
+#endif

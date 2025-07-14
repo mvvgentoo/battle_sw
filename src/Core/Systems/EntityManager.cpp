@@ -94,6 +94,11 @@ const EntityFactoryRegistry &EntityManager::getEntityFactoryRegistry() const
     return _factoryRegistry;
 }
 
+std::shared_ptr<EntityManager> EntityManager::getSharedData()
+{
+    return shared_from_this();
+}
+
 std::vector<EntityID> EntityManager::getNeighboursInRadius(Position start, Predicate condition) const
 {
     std::vector<EntityID> result;
@@ -102,6 +107,23 @@ std::vector<EntityID> EntityManager::getNeighboursInRadius(Position start, Predi
         if (condition(entity, start))
         {
             result.push_back(id);
+        }
+    }
+
+    return result;
+}
+
+std::vector<EntityHandle> EntityManager::getAllEntities(
+    const std::function<bool(const std::unique_ptr<Entity>&)>& predicate) const
+{
+    std::vector<EntityHandle> result;
+    auto self = shared_from_this();
+
+    for (const auto& [id, entity] : _units)
+    {
+        if (entity && predicate(entity))
+        {
+            result.emplace_back(self, id);
         }
     }
 

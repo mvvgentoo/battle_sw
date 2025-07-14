@@ -7,11 +7,20 @@
 
 struct RangeAttackData : public IDataComponent
 {
-    int agility = 10;
-    int rangeMin = 2;
-    int rangeMax = 5;
-    int priority = 30;
+    static const int DefaultPriority = 50;
+    int agility;
+    int rangeMin;
+    int rangeMax;
     std::shared_ptr<ITargetSelectorStrategy> targetSelector;
+    int priority;
+
+    RangeAttackData(int agility_, int rangeMin_, int rangeMax_,
+                    std::shared_ptr<ITargetSelectorStrategy> targetSelector_, int priority_ = DefaultPriority)
+        : agility(agility_), rangeMin(rangeMin_), rangeMax(rangeMax_), targetSelector(targetSelector_), priority(priority_)
+    {
+
+    }
+
 };
 
 #endif // RANGEATTACKDATA_HPP

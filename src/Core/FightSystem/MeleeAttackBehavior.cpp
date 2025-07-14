@@ -19,8 +19,8 @@ std::vector<EntityID> MeleeAttackBehavior::findTargets(const EntityManager &enti
     const Position& pos = entityManager.getEntityByID(self).lock()->getPosition();
     return _data->targetSelector->selectTargets
         (
-            entityManager.getNeighboursInRadius(pos, [range = _data->range](const auto& entity, Position pos) {
-                return entity && entity->isAlive()
+            entityManager.getNeighboursInRadius(pos, [range = _data->range, self](const auto& entity, Position pos) {
+                return entity && entity->isAlive() && entity->getID() != self
                        && chebyshevDistance(pos, entity->getPosition()) <= range;
             })
             );

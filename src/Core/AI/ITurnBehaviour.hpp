@@ -6,7 +6,7 @@
 #include <functional>
 #include <memory>
 
-class World;
+class IWorldContext;
 
 class ITurnBehavior
 {
@@ -18,7 +18,7 @@ public:
 		INVALID
 	};
 
-	virtual TurnStatus makeTurn(std::weak_ptr<World> world, EntityID owner) = 0;
+    virtual TurnStatus makeTurn(std::weak_ptr<IWorldContext> worldCtx, EntityID owner) = 0;
 };
 
 #endif	// ITURNSTRATEGY_H

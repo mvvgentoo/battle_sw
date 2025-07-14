@@ -55,6 +55,16 @@ CombatSystem &World::getCombatSystem()
     return *_combatSystem;
 }
 
+const EventManager &World::getEventManager() const
+{
+    return *_eventManager;
+}
+
+EventManager &World::getEventManager()
+{
+    return *_eventManager;
+}
+
 std::shared_ptr<IWorldContext> World::getSharedContext()
 {
     return shared_from_this();

@@ -41,3 +41,8 @@ EntityHandle EntityHelper::createEntity(IWorldContext &ctx, const std::string &n
     return entity;
 }
 
+EntityHandle EntityHelper::createHandle(IWorldContext &ctx, EntityID id)
+{
+    return EntityHandle(ctx.getEntityManager().getSharedData(), id);
+}
+

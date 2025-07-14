@@ -41,7 +41,7 @@ private:
 
     // IGameService interface
 public:
-    int getPriority() override;
+    int getPriority() const override;
     void setPriority(int priority) override;
 };
 

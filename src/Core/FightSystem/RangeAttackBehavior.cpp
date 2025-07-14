@@ -19,10 +19,10 @@ std::vector<EntityID> RangeAttackBehavior::findTargets(const EntityManager &enti
     const Position& pos = entityManager.getEntityByID(self).lock()->getPosition();
     return _data->targetSelector->selectTargets
         (
-            entityManager.getNeighboursInRadius(pos, [rMin = _data->rangeMin, rMax = _data->rangeMax](const auto& entity, Position pos)
+            entityManager.getNeighboursInRadius(pos, [rMin = _data->rangeMin, rMax = _data->rangeMax, self](const auto& entity, Position pos)
                                                 {
                                                     auto dist = chebyshevDistance(pos, entity->getPosition());
-                                                    return entity && entity->isAlive() && dist <= rMax && dist >= rMin;
+                                                    return entity && entity->isAlive()  && entity->getID() != self && dist <= rMax && dist >= rMin;
                                                 })
             );
 }

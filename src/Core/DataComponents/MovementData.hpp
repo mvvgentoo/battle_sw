@@ -7,8 +7,13 @@
 
 struct MovementData : public IDataComponent
 {
-    int maxCellsPerTurn = 1;
-    CellFlag cellOccupyType = CellFlag::OCCUPY;
+    int maxCellsPerTurn;
+    CellFlag cellOccupyType;
+
+    MovementData(int cellsPerTurn, CellFlag cellFlag = CellFlag::OCCUPY) : maxCellsPerTurn(cellsPerTurn), cellOccupyType(cellFlag)
+    {
+
+    }
 };
 
 

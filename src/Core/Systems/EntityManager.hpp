@@ -31,6 +31,8 @@ public:
     Entity* resolveHandle(EntityHandle entityHandle) const;
 
     std::vector<EntityID> getNeighboursInRadius(Position startPoint, Predicate condition) const;
+    std::vector<EntityHandle> getAllEntities(
+        const std::function<bool(const std::unique_ptr<Entity>&)>& predicate) const;
 
     bool updateEntityPosition(EntityID id, const Position& pos);
     bool updateEntityPosition(EntityHandle entityHandle, const Position& pos);
@@ -38,6 +40,8 @@ public:
 
     EntityFactoryRegistry& getEntityFactoryRegistry();
     const EntityFactoryRegistry& getEntityFactoryRegistry() const;
+
+    std::shared_ptr<EntityManager> getSharedData();
 
 private:
     std::map<EntityID, std::unique_ptr<Entity>> _units;

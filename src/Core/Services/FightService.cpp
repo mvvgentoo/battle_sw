@@ -45,7 +45,7 @@ ITurnBehavior::TurnStatus FightService::update()
     return ITurnBehavior::TurnStatus::IDLE;
 }
 
-int FightService::getPriority()
+int FightService::getPriority() const
 {
     return _priority;
 }

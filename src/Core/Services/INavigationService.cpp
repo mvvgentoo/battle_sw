@@ -8,9 +8,8 @@
 #include "IO/Events/MarchStarted.hpp"
 #include "IO/Events/UnitMoved.hpp"
 
-NavigationService::NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner) :
-        _worldContext(worldCtx),
-		_owner(owner)
+NavigationService::NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv) :
+    _worldContext(worldCtx), _owner(owner), _moveBehavior(std::move(moveBhv))
 {}
 
 NavigationService::~NavigationService() = default;
@@ -86,7 +85,7 @@ void NavigationService::addNavTask(std::unique_ptr<INavigationTask> navTask)
 	_navTasks.push_back(std::move(navTask));
 }
 
-int NavigationService::getPriority()
+int NavigationService::getPriority() const
 {
     return _priority;
 }

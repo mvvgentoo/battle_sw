@@ -3,6 +3,7 @@
 
 #include "ITurnBehaviour.hpp"
 
+class IWorldContext;
 
 class DefaultTurnBehavior : public ITurnBehavior
 {
@@ -10,7 +11,7 @@ public:
 	DefaultTurnBehavior();
 	virtual ~DefaultTurnBehavior();
 
-	TurnStatus makeTurn(std::weak_ptr<World> world, EntityID owner) override;
+    TurnStatus makeTurn(std::weak_ptr<IWorldContext> worldCtx, EntityID owner) override;
 
 private:
 

@@ -2,8 +2,13 @@
 
 NavGridSystem::NavGridSystem(int w, int h) : _w(w), _h(h)
 {
-	_gridOccupied.resize(w * h, 0);
-	_gridShared.resize(w * h);
+    _gridOccupied.resize(w * h, 0);
+    _gridShared.resize(w * h);
+}
+
+NavGridSystem::~NavGridSystem()
+{
+
 }
 
 bool NavGridSystem::updatePosition(EntityID id, Position old_pos, Position new_pos, CellFlag flag)
