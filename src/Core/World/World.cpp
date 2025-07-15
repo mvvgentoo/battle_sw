@@ -30,41 +30,49 @@ std::shared_ptr<World> World::create(
 
 const NavGridSystem& World::getGrid() const
 {
+	assert(_navGrid && "NavGridSystem is null");
 	return *_navGrid;
 }
 
 NavGridSystem& World::getGrid()
 {
+	assert(_navGrid && "NavGridSystem is null");
 	return *_navGrid;
 }
 
 const EntityManager& World::getEntityManager() const
 {
+	assert(_entityManager && "EntityManager is null");
 	return *_entityManager;
 }
 
 EntityManager& World::getEntityManager()
 {
+	assert(_entityManager && "EntityManager is null");
 	return *_entityManager;
 }
 
 const CombatSystem& World::getCombatSystem() const
 {
+	assert(_combatSystem && "CombatSystem is null");
 	return *_combatSystem;
 }
 
 CombatSystem& World::getCombatSystem()
 {
+	assert(_combatSystem && "CombatSystem is null");
 	return *_combatSystem;
 }
 
 const EventManager& World::getEventManager() const
 {
+	assert(_eventManager && "EventManager is null");
 	return *_eventManager;
 }
 
 EventManager& World::getEventManager()
 {
+	assert(_eventManager && "EventManager is null");
 	return *_eventManager;
 }
 
