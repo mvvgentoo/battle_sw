@@ -2,7 +2,7 @@
 #define SIMPLEMOVEMENTBEHAVIOR_HPP
 
 #include <memory>
-#include "IMovementBehavior.hpp"
+#include "Core/Navigation/IMovementBehavior.hpp"
 
 
 class IWorldContext;

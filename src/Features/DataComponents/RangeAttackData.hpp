@@ -2,7 +2,7 @@
 #define RANGEATTACKDATA_HPP
 
 #include <memory>
-#include "IDataComponent.hpp"
+#include "Core/DataComponents/IDataComponent.hpp"
 #include "Core/FightSystem/ITargetSelectorStrategy.hpp"
 
 struct RangeAttackData : public IDataComponent

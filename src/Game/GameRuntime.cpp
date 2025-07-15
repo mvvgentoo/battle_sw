@@ -1,4 +1,4 @@
-#include "GameRuntime.hpp"
+#include "Game/GameRuntime.hpp"
 #include "Core/AI/DefaultTurnBehavior.hpp"
 
 #include <Core/Entity/Entity.hpp>
@@ -12,8 +12,8 @@
 #include <Core/World/World.hpp>
 #include <Core/World/EntityHelper.hpp>
 #include <Core/World/Simulator.hpp>
-#include <Features/HunterFactory.hpp>
-#include <Features/SwordsmanFactory.hpp>
+#include <Features/FactoryMethods/HunterFactory.hpp>
+#include <Features/FactoryMethods/SwordsmanFactory.hpp>
 #include <IO/Commands/CreateMap.hpp>
 #include <IO/Commands/March.hpp>
 #include <IO/Commands/SpawnHunter.hpp>

@@ -1,16 +1,15 @@
-#ifndef RANGEATTACKBEHAVIOR_HPP
-#define RANGEATTACKBEHAVIOR_HPP
+#ifndef MELEEATTACKBEHAVIOR_HPP
+#define MELEEATTACKBEHAVIOR_HPP
 
 #include <memory>
 #include "Core/FightSystem/IAttackBehavior.hpp"
-#include "Core/DataComponents/RangeAttackData.hpp"
 #include "Core/FightSystem/CombatSystem.hpp"
+#include "Features/DataComponents/MeleeAttackData.hpp"
 
-class RangeAttackBehavior : public IAttackBehavior
+class MeleeAttackBehavior : public IAttackBehavior
 {
 public:
-    explicit RangeAttackBehavior(std::shared_ptr<RangeAttackData> data);
-    virtual ~RangeAttackBehavior() = default;
+    explicit MeleeAttackBehavior(std::shared_ptr<MeleeAttackData> data);
 
     int getPriority() const override;
     bool canBeActivated(const EntityManager&, EntityID) const override;
@@ -19,6 +18,6 @@ public:
     void execute(EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combat) const override;
 
 private:
-    std::shared_ptr<RangeAttackData> _data;
+    std::shared_ptr<MeleeAttackData> _data;
 };
-#endif
+#endif // MELEEATTACKBEHAVIOR_HPP
