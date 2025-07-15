@@ -3,7 +3,7 @@
 
 #include "Core/Factory/UnitParams.hpp"
 
-#include <Core/Entity/EntityHandle.hpp>
+#include "Core/Entity/EntityHandle.hpp"
 
 class IWorldContext;
 class Position;

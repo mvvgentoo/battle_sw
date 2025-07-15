@@ -6,12 +6,12 @@
 #include "Features/FightBehaviors/MeleeAttackBehavior.hpp"
 #include "Features/NavBehaviors/SimpleMovementBehavior.hpp"
 
-#include <Core/DataComponents/HealthComponent.hpp>
-#include <Core/FightSystem/ITargetSelectorStrategy.hpp>
-#include <Core/Services/FightService.hpp>
-#include <Core/Services/HealthService.hpp>
-#include <Core/Services/INavigationService.hpp>
-#include <Core/World/IWorldContext.hpp>
+#include "Core/DataComponents/HealthComponent.hpp"
+#include "Core/FightSystem/ITargetSelectorStrategy.hpp"
+#include "Core/Services/FightService.hpp"
+#include "Core/Services/HealthService.hpp"
+#include "Core/Services/INavigationService.hpp"
+#include "Core/World/IWorldContext.hpp"
 
 SwordsmanFactory::SwordsmanFactory(int hp, int meleeRange, int damage) :
 		_hp(hp),

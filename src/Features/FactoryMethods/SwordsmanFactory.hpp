@@ -1,8 +1,8 @@
 #ifndef SWORDSMAN_FACTORY_HPP
 #define SWORDSMAN_FACTORY_HPP
 
-#include <Core/Entity/EntityHandle.hpp>
-#include <Core/Factory/EntityFactory.hpp>
+#include "Core/Entity/EntityHandle.hpp"
+#include "Core/Factory/EntityFactory.hpp"
 #include <memory>
 
 class World;

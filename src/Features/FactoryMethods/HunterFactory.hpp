@@ -1,7 +1,7 @@
 #ifndef HUNTER_FACTORY_HPP
 #define HUNTER_FACTORY_HPP
 
-#include <Core/Factory/EntityFactory.hpp>
+#include "Core/Factory/EntityFactory.hpp"
 #include <memory>
 
 class World;
