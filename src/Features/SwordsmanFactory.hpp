@@ -1,8 +1,8 @@
 #ifndef SWORDSMAN_FACTORY_HPP
 #define SWORDSMAN_FACTORY_HPP
 
-#include <Core/EntityHandle.hpp>
-#include <Core/EntiyBuilder.hpp>
+#include <Core/Entity/EntityHandle.hpp>
+#include <Core/Factory/EntityFactory.hpp>
 #include <memory>
 
 class World;
@@ -13,7 +13,7 @@ public:
 	SwordsmanFactory(int hp, int meleeRange, int damage);
 	~SwordsmanFactory() = default;
 	std::unique_ptr<Entity> create(
-		std::shared_ptr<World> world, EntityID id, Position pos, const UnitParams& params) const override;
+        std::shared_ptr<IWorldContext> worldContext, EntityID id, Position pos, const UnitParams& params) const override;
 
 private:
 	int _hp;

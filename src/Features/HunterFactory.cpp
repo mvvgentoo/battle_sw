@@ -1,15 +1,21 @@
 #include "HunterFactory.hpp"
 
-#include "HunterTurnBehavior.hpp"
+#include <Core/Services/FightService.hpp>
+#include <Core/Services/HealthService.hpp>
+#include <Core/Services/INavigationService.hpp>
+#include <Core/FightSystem/ITargetSelectorStrategy.hpp>
 
-#include <Core/FightMeleeComponent.hpp>
-#include <Core/FightService.hpp>
-#include <Core/HealthService.hpp>
-#include <Core/INavigationService.hpp>
-#include <Core/ITargetSelectorStrategy.hpp>
-#include <Core/MovementComponent.hpp>
-#include <Core/RangeFightComponent.hpp>
-#include <Core/World.hpp>
+#include <Core/World/IWorldContext.hpp>
+
+#include <Core/DataComponents/MeleeAttackData.hpp>
+#include "Core/DataComponents/MovementData.hpp"
+#include "Core/DataComponents/RangeAttackData.hpp"
+#include "Core/FightSystem/MeleeAttackBehavior.hpp"
+#include "Core/FightSystem/RangeAttackBehavior.hpp"
+#include "Core/Navigation/SimpleMovementBehavior.hpp"
+#include "Core/World/EntityHelper.hpp"
+
+#include <Core/DataComponents/HealthComponent.hpp>
 
 HunterFactory::HunterFactory(int hp, int minRange, int maxRange, int meleeRange, int agility, int strength) :
 		_hp(hp),
@@ -20,9 +26,14 @@ HunterFactory::HunterFactory(int hp, int minRange, int maxRange, int meleeRange,
 		_strength(strength)
 {}
 
-std::unique_ptr<Entity> HunterFactory::create(
-	std::shared_ptr<World> world, EntityID id, Position pos, const UnitParams& params) const
+std::unique_ptr<Entity> HunterFactory::create(std::shared_ptr<IWorldContext> worldContext, EntityID id, Position pos, const UnitParams& params) const
 {
+    if (worldContext == nullptr)
+    {
+        return nullptr;
+    }
+
+    const int maxSteps = 1;
 	int hp = params.get("hp", _hp);
 	int meleeRange = params.get("meleeRange", _meleeRange);
 	int strength = params.get("strength", _strength);
@@ -30,26 +41,34 @@ std::unique_ptr<Entity> HunterFactory::create(
 	int maxAttackRange = params.get("maxRange", _maxAttackRange);
 	int agility = params.get("agility", _agility);
 
-	auto entity = std::make_unique<Entity>(id, pos, std::make_unique<HunterTurnBehavior>());
+    auto entity = std::make_unique<Entity>(id, pos);
 
-	auto healthSrv = std::make_shared<HealthService>(hp, id, world);
-	entity->addService<HealthService>(healthSrv);
+    // Health Service
+    auto healthData = std::make_shared<HealthComponent>(hp);
+    auto healthSrv = std::make_shared<HealthService>(id, worldContext, healthData);
 
-	auto fightSrv = std::make_shared<FightService>(world, id);
-	auto targetSelector = std::make_shared<RandomTargetSelector>();
-	auto meleeComponent = std::make_shared<FightMeleeComponent>(meleeRange, strength, targetSelector);
-	fightSrv->addComponent<FightMeleeComponent>(meleeComponent);
-	auto rangeComponent
-		= std::make_shared<RangeFightComponent>(minAttackRange, maxAttackRange, agility, targetSelector);
-	fightSrv->addComponent<RangeFightComponent>(rangeComponent);
+    entity->addComponent<HealthComponent>(healthData);
+    entity->addService<HealthService>(healthSrv);
 
-	entity->addService<FightService>(fightSrv);
+    // Fight Service
+    auto targetSelector = std::make_shared<RandomTargetSelector>();
+    auto meleeAttackData = std::make_shared<MeleeAttackData>(strength, meleeRange, targetSelector);
+    auto rangeAttackData = std::make_shared<RangeAttackData>(agility, minAttackRange, maxAttackRange, targetSelector);
 
-	auto navSrv = std::make_shared<NavigationService>(world, world->getEntityByID(id));
-	const int maxSteps = 1;
-	auto movementComponent = std::make_shared<MovementComponent>(world, maxSteps);
-	navSrv->addComponent<MovementComponent>(movementComponent);
-	entity->addService<NavigationService>(navSrv);
+    auto fightSrv = std::make_shared<FightService>(worldContext, id);
+    fightSrv->addAttackBehavior(std::make_unique<MeleeAttackBehavior>(meleeAttackData));
+    fightSrv->addAttackBehavior(std::make_unique<RangeAttackBehavior>(rangeAttackData));
+
+    entity->addComponent<MeleeAttackData>(meleeAttackData);
+    entity->addService<FightService>(fightSrv);
+
+    // Navigation Service
+    auto movementData = std::make_shared<MovementData>(maxSteps);
+    auto simpleMovementBhv = std::make_unique<SimpleMovementBehavior>(movementData);
+    auto navSrv = std::make_shared<NavigationService>(worldContext, EntityHelper::createHandle(*worldContext,id), std::move(simpleMovementBhv));
+
+    entity->addComponent<MovementData>(movementData);
+    entity->addService<NavigationService>(navSrv);
 
 	return entity;
 }
