@@ -12,8 +12,8 @@ class IAttackBehavior;
 class FightService : public IGameService
 {
 public:
-    constexpr static int DefaultPriority = 100;
-    FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner, int priority = DefaultPriority);
+	constexpr static int DefaultPriority = 100;
+	FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner, int priority = DefaultPriority);
 	virtual ~FightService();
 
 	FightService(const FightService&) = delete;
@@ -25,11 +25,11 @@ public:
 
 	virtual ITurnBehavior::TurnStatus update() override;
 
-private:	
+private:
 	std::weak_ptr<IWorldContext> _worldContext;
-    EntityID _owner;
-    int _priority;
-    std::vector<std::shared_ptr<IAttackBehavior>> _behaviors;
+	EntityID _owner;
+	int _priority;
+	std::vector<std::shared_ptr<IAttackBehavior>> _behaviors;
 
 public:
 	int getPriority() const override;

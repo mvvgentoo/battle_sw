@@ -4,9 +4,9 @@
 #include "Core/World/IWorldContext.hpp"
 
 FightService::FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner, int priority) :
-        _worldContext(worldContext),
-        _owner(owner),
-        _priority(priority)
+		_worldContext(worldContext),
+		_owner(owner),
+		_priority(priority)
 {}
 
 FightService::~FightService() {}

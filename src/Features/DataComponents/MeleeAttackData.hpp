@@ -12,14 +12,10 @@ struct MeleeAttackData : public IDataComponent
 	int range;
 	std::shared_ptr<ITargetSelectorStrategy> targetSelector;
 
-	MeleeAttackData(
-		int damage_,
-		int range_,
-        std::shared_ptr<ITargetSelectorStrategy> _targetSelector
-    ) :
+	MeleeAttackData(int damage_, int range_, std::shared_ptr<ITargetSelectorStrategy> _targetSelector) :
 			damage(damage_),
 			range(range_),
-            targetSelector(_targetSelector)
+			targetSelector(_targetSelector)
 	{}
 };
 
