@@ -6,7 +6,7 @@
 #include <vector>
 
 class EntityManager;
-class CombatSystem;
+class IWorldContext;
 
 class IAttackBehavior
 {
@@ -17,7 +17,7 @@ public:
 	virtual bool canBeActivated(const EntityManager&, EntityID) const = 0;
 
 	virtual std::vector<EntityID> findTargets(const EntityManager&, EntityID) const = 0;
-    virtual void execute(const EntityManager& entityManager, EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combatSystem) const = 0;
+    virtual void execute(const IWorldContext& worldContext, EntityID attacker, const std::vector<EntityID>& targets) const = 0;
 };
 
 #endif	// IATTACKBEHAVIOR_HPP

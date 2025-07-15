@@ -6,10 +6,10 @@
 #include "IO/Events/UnitDied.hpp"
 #include "Core/Systems/EntityManager.hpp"
 
-HealthService::HealthService(
-    EntityID owner, std::weak_ptr<IWorldContext> worldContext, int priority) :
-		_owner(owner),
+HealthService::HealthService(std::weak_ptr<IWorldContext> worldContext,
+    EntityID owner, int priority) :
         _worldContext(worldContext),
+        _owner(owner),
         _priority(priority)
 {
     if(auto ctx = worldContext.lock())

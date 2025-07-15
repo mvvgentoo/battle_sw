@@ -30,8 +30,7 @@ static Direction computeStep(const Position& from, const Position& to)
 	return {stepX, stepY};
 }
 
-SimpleMovementBehavior::SimpleMovementBehavior(std::shared_ptr<MovementData> data) :
-		_data(data)
+SimpleMovementBehavior::SimpleMovementBehavior()
 {}
 
 SimpleMovementBehavior::~SimpleMovementBehavior() {}
@@ -44,8 +43,14 @@ IMovementBehavior::MovementResult SimpleMovementBehavior::moveTo(
 		return MovementResult{false, true, current, target};
 	}
 
+    int steps = 0;
+    if(auto entity = EntityHelper::createHandle(worldCtx, id).lock())
+    {
+        auto data = entity->getComponentByType<MovementData>();
+        steps = data->maxCellsPerTurn;
+    }
+
 	auto from = current;
-	int steps = _data->maxCellsPerTurn;
 	const auto& navGrid = worldCtx.getGrid();
 
 	for (int s = 0; s < steps; ++s)

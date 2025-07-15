@@ -1,9 +1,10 @@
 #ifndef RANGEATTACKBEHAVIOR_HPP
 #define RANGEATTACKBEHAVIOR_HPP
 
-#include "Core/FightSystem/CombatSystem.hpp"
 #include "Core/FightSystem/IAttackBehavior.hpp"
 
+class IWorldContext;
+class EntityManager;
 
 #include <memory>
 
@@ -18,7 +19,7 @@ public:
 	bool canBeActivated(const EntityManager&, EntityID) const override;
 
 	std::vector<EntityID> findTargets(const EntityManager& entityManager, EntityID self) const override;
-    void execute(const EntityManager& entityManager, EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combat) const override;
+    void execute(const IWorldContext& worldContext, EntityID attacker, const std::vector<EntityID>& targets) const override;
 
 private:
     int _priority;

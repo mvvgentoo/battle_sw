@@ -31,29 +31,29 @@ std::unique_ptr<Entity> SwordsmanFactory::create(
 
 	// Health Service
 	auto healthData = std::make_shared<HealthComponent>(hp);
-    auto healthSrv = std::make_shared<HealthService>(id, worldContext);
+    auto movementData = std::make_shared<MovementData>(maxSteps);
+    auto targetSelector = std::make_shared<RandomTargetSelector>();
+    auto meleeAttackData = std::make_shared<MeleeAttackData>(strength, meleeRange, targetSelector);
 
-	entity->addComponent<HealthComponent>(healthData);
-	entity->addService<HealthService>(healthSrv);
+    entity->addComponent<MovementData>(movementData);
+    entity->addComponent<HealthComponent>(healthData);
+    entity->addComponent<MeleeAttackData>(meleeAttackData);
 
 	// Fight Service
-	auto targetSelector = std::make_shared<RandomTargetSelector>();
-	auto meleeAttackData = std::make_shared<MeleeAttackData>(strength, meleeRange, targetSelector);
-
 	auto fightSrv = std::make_shared<FightService>(worldContext, id);
     fightSrv->addAttackBehavior(std::make_unique<MeleeAttackBehavior>());
 
-	entity->addComponent<MeleeAttackData>(meleeAttackData);
-	entity->addService<FightService>(fightSrv);
+    // Health Service
+    auto healthSrv = std::make_shared<HealthService>(worldContext, id);
 
-	// Navigation Service
-	auto movementData = std::make_shared<MovementData>(maxSteps);
-	auto simpleMovementBhv = std::make_unique<SimpleMovementBehavior>(movementData);
+	// Navigation Service    
 	auto navSrv = std::make_shared<NavigationService>(
-		worldContext, EntityHelper::createHandle(*worldContext, id), std::move(simpleMovementBhv));
+        worldContext, EntityHelper::createHandle(*worldContext, id), std::make_unique<SimpleMovementBehavior>());
 
-	entity->addComponent<MovementData>(movementData);
-	entity->addService<NavigationService>(navSrv);
+    // Add services
+    entity->addService<NavigationService>(navSrv);
+    entity->addService<FightService>(fightSrv);
+    entity->addService<HealthService>(healthSrv);
 
 	return entity;
 }

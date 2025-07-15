@@ -18,12 +18,8 @@ class CombatSystem
 {
 public:
 	CombatSystem();
-	CombatSystem(std::shared_ptr<IWorldContext> worldCtx);
 	~CombatSystem();
-
-	void setContext(std::shared_ptr<IWorldContext> worldCtx);
-
-	void dealDamageNow(const DamageEvent& evt);
+    void dealDamageNow(const DamageEvent& evt, const IWorldContext &worldCtx) const;
 
 private:
 	std::weak_ptr<IWorldContext> _worldContext;

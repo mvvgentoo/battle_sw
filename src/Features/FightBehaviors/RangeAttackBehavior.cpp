@@ -1,6 +1,8 @@
 #include "RangeAttackBehavior.hpp"
 
+#include "Core/FightSystem/CombatSystem.hpp"
 #include "Core/Systems/EntityManager.hpp"
+#include "Core/World/IWorldContext.hpp"
 #include "Features/DataComponents/RangeAttackData.hpp"
 
 RangeAttackBehavior::RangeAttackBehavior(int priority): _priority(priority)
@@ -43,15 +45,15 @@ std::vector<EntityID> RangeAttackBehavior::findTargets(const EntityManager& enti
 		}));
 }
 
-void RangeAttackBehavior::execute(const EntityManager &entityManager, EntityID attacker, const std::vector<EntityID>& targets, CombatSystem& combat) const
+void RangeAttackBehavior::execute(const IWorldContext &worldContext, EntityID attacker, const std::vector<EntityID>& targets) const
 {
-    auto attackerHandle = entityManager.getEntityByID(attacker);
+    auto attackerHandle = worldContext.getEntityManager().getEntityByID(attacker);
     if (auto attackerEntity = attackerHandle.lock())
     {
         auto data = attackerEntity->getComponentByType<RangeAttackData>();
         for (auto id : targets)
         {
-            combat.dealDamageNow({attacker, id, data->agility});
+            worldContext.getCombatSystem().dealDamageNow({attacker, id, data->agility}, worldContext);
         }
     }
 }

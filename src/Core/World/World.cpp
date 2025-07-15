@@ -25,12 +25,7 @@ std::shared_ptr<World> World::create(
 	std::shared_ptr<CombatSystem> combatSystem,
 	std::shared_ptr<EventManager> eventManager)
 {
-	auto result = EnableMakeShared<World>::createSharedPtrInternal(navGrid, entityManager, combatSystem, eventManager);
-	if (combatSystem)
-	{
-		combatSystem->setContext(result);
-	}
-	return result;
+    return EnableMakeShared<World>::createSharedPtrInternal(navGrid, entityManager, combatSystem, eventManager);
 }
 
 const NavGridSystem& World::getGrid() const

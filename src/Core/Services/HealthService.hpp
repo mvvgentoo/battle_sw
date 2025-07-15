@@ -16,7 +16,7 @@ public:
     constexpr static int DefaultPriority = 0;
 	using hp_amount = int;
 
-    HealthService(EntityID _owner, std::weak_ptr<IWorldContext> worldContext, int priority = DefaultPriority);
+    HealthService(std::weak_ptr<IWorldContext> worldContext, EntityID _owner, int priority = DefaultPriority);
 	virtual ~HealthService();
 
 	HealthService(const HealthService&) = delete;
@@ -33,8 +33,8 @@ public:
 	ITurnBehavior::TurnStatus update() override;
 
 private:
-	EntityID _owner;    
     std::weak_ptr<IWorldContext> _worldContext;
+    EntityID _owner;
     int _priority;
     EntityHandle _handle;
 

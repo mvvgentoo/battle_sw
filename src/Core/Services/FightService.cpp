@@ -38,7 +38,7 @@ ITurnBehavior::TurnStatus FightService::update()
 
 		if (auto targets = behavior->findTargets(entityManager, _owner); !targets.empty())
 		{
-            behavior->execute(entityManager, _owner, targets, worldContext->getCombatSystem());
+            behavior->execute(*worldContext, _owner, targets);
 			return ITurnBehavior::TurnStatus::SUCCESS;
 		}
 	}
