@@ -1,21 +1,20 @@
 #include "NavGridSystem.hpp"
 
-NavGridSystem::NavGridSystem(int w, int h) : _w(w), _h(h)
+NavGridSystem::NavGridSystem(int w, int h) :
+		_w(w),
+		_h(h)
 {
-    _gridOccupied.resize(w * h, 0);
-    _gridShared.resize(w * h);
+	_gridOccupied.resize(w * h, 0);
+	_gridShared.resize(w * h);
 }
 
-NavGridSystem::~NavGridSystem()
-{
-
-}
+NavGridSystem::~NavGridSystem() {}
 
 bool NavGridSystem::updatePosition(EntityID id, Position old_pos, Position new_pos, CellFlag flag)
 {
 	if (!inBounds(new_pos))
 	{
-        return false;
+		return false;
 	}
 
 	size_t oldIndex = old_pos.y * getWidth() + old_pos.x;
@@ -46,10 +45,10 @@ bool NavGridSystem::updatePosition(EntityID id, Position old_pos, Position new_p
 		break;
 		default:
 			//log_error
-            return false;
-    }
+			return false;
+	}
 
-    return true;
+	return true;
 }
 
 bool NavGridSystem::inBounds(const Position& pos) const
@@ -69,10 +68,10 @@ bool NavGridSystem::isOccupied(const Position& pos) const
 
 int NavGridSystem::getHeight() const
 {
-    return _h;
+	return _h;
 }
 
 int NavGridSystem::getWidth() const
 {
-    return _w;
+	return _w;
 }

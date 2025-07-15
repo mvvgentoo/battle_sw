@@ -11,10 +11,9 @@ public:
 	DefaultTurnBehavior();
 	virtual ~DefaultTurnBehavior();
 
-    TurnStatus makeTurn(std::weak_ptr<IWorldContext> worldCtx, EntityID owner) override;
+	TurnStatus makeTurn(std::weak_ptr<IWorldContext> worldCtx, EntityID owner) override;
 
 private:
-
 };
 
 #endif	// DEFAULTTURNBEHAVIOR_HPP

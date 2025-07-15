@@ -1,9 +1,8 @@
 #ifndef HUNTER_FACTORY_HPP
 #define HUNTER_FACTORY_HPP
 
-#include <memory>
-
 #include <Core/Factory/EntityFactory.hpp>
+#include <memory>
 
 class World;
 
@@ -13,7 +12,10 @@ public:
 	HunterFactory(int hp, int minRange, int maxRange, int meleeRange, int agility, int strength);
 	~HunterFactory() = default;
 	std::unique_ptr<Entity> create(
-        std::shared_ptr<IWorldContext> worldContext, EntityID id, Position pos, const UnitParams& params) const override;
+		std::shared_ptr<IWorldContext> worldContext,
+		EntityID id,
+		Position pos,
+		const UnitParams& params) const override;
 
 private:
 	int _hp;

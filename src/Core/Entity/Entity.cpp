@@ -1,13 +1,13 @@
 #include "Entity.hpp"
-#include "Core/DataComponents/IDataComponent.hpp"
-#include "Core/AI/ITurnBehaviour.hpp"
-#include "Core/World/World.hpp"
-#include "Core/Services/HealthService.hpp"
 
+#include "Core/AI/ITurnBehaviour.hpp"
+#include "Core/DataComponents/IDataComponent.hpp"
+#include "Core/Services/HealthService.hpp"
+#include "Core/World/World.hpp"
 
 Entity::Entity(EntityID id, Position pos) :
 		_id(id),
-        _pos(pos)
+		_pos(pos)
 {}
 
 Entity::~Entity() {}
@@ -44,10 +44,10 @@ bool Entity::isAlive() const
 		return healthSrv->isAlive();
 	}
 
-    return true;
+	return true;
 }
 
-std::vector<std::shared_ptr<IGameService> > Entity::getAllServices() const
+std::vector<std::shared_ptr<IGameService>> Entity::getAllServices() const
 {
-    return _serviceHandler.getAllComponents();
+	return _serviceHandler.getAllComponents();
 }

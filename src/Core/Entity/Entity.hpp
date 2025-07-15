@@ -18,10 +18,10 @@ class Entity
 public:
 	using IGameServicePtr = std::unique_ptr<IGameService>;
 
-    Entity(EntityID id, Position pos);
-    ~Entity();
+	Entity(EntityID id, Position pos);
+	~Entity();
 
-    EntityID getID() const;
+	EntityID getID() const;
 	const Position& getPosition() const;
 	void setPosition(const Position& pos);
 
@@ -31,47 +31,47 @@ public:
 	template <typename Base, typename T>
 	bool addService(std::shared_ptr<T> service)
 	{
-        return _serviceHandler.addComponent<Base, T>(service);
+		return _serviceHandler.addComponent<Base, T>(service);
 	}
 
 	template <typename T>
 	std::shared_ptr<T> getServiceByType() const
 	{
-        return _serviceHandler.getComponentByType<T>();
+		return _serviceHandler.getComponentByType<T>();
 	}
 
 	template <typename T>
 	bool hasService() const
 	{
-        return _serviceHandler.hasComponent<T>();
+		return _serviceHandler.hasComponent<T>();
 	}
 
-    template <typename Base, typename T>
-    bool addComponent(std::shared_ptr<T> service)
-    {
-        return _componentHandler.addComponent<Base, T>(service);
-    }
+	template <typename Base, typename T>
+	bool addComponent(std::shared_ptr<T> service)
+	{
+		return _componentHandler.addComponent<Base, T>(service);
+	}
 
-    template <typename T>
-    std::shared_ptr<T> getComponentByType() const
-    {
-        return _componentHandler.getComponentByType<T>();
-    }
+	template <typename T>
+	std::shared_ptr<T> getComponentByType() const
+	{
+		return _componentHandler.getComponentByType<T>();
+	}
 
-    template <typename T>
-    bool hasComponent() const
-    {
-        return _componentHandler.hasComponent<T>();
-    }
+	template <typename T>
+	bool hasComponent() const
+	{
+		return _componentHandler.hasComponent<T>();
+	}
 
-    std::vector<std::shared_ptr<IGameService>> getAllServices() const;
+	std::vector<std::shared_ptr<IGameService>> getAllServices() const;
 
 private:
 	EntityID _id;
 	Position _pos;
 
-    ComponentHandler<IGameService> _serviceHandler;
-    ComponentHandler<IDataComponent> _componentHandler;
+	ComponentHandler<IGameService> _serviceHandler;
+	ComponentHandler<IDataComponent> _componentHandler;
 };
 
 #endif	// ENTITY_H

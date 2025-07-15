@@ -3,8 +3,8 @@
 
 struct IDataComponent
 {
-public:    
-    virtual ~IDataComponent();
+public:
+	virtual ~IDataComponent();
 };
 
 #endif

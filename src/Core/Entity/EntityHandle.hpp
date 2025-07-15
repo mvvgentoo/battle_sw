@@ -6,19 +6,20 @@
 
 class EntityManager;
 
-class EntityHandle {
+class EntityHandle
+{
 public:
-    EntityHandle();
-    EntityHandle(std::weak_ptr<const EntityManager> _entityManager, EntityID id);
-    ~EntityHandle();
+	EntityHandle();
+	EntityHandle(std::weak_ptr<const EntityManager> _entityManager, EntityID id);
+	~EntityHandle();
 
-    EntityID getId() const;
-    Entity* lock();
-    bool isValid() const;
+	EntityID getId() const;
+	Entity* lock();
+	bool isValid() const;
 
 private:
-    std::weak_ptr<const EntityManager> _entityManager;
-    EntityID _id;
+	std::weak_ptr<const EntityManager> _entityManager;
+	EntityID _id;
 };
 
 #endif	// ENTITYHANDLE_H

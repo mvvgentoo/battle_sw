@@ -1,132 +1,132 @@
 #include "EntityManager.hpp"
+
 #include "Core/Factory/EntityFactory.hpp"
-#include "Core/World/IWorldContext.hpp"
 #include "Core/Utils/EnableMakeShared.hpp"
+#include "Core/World/IWorldContext.hpp"
 
-EntityManager::EntityManager()
+EntityManager::EntityManager() {}
+
+EntityManager::~EntityManager() {}
+
+EntityHandle EntityManager::createEntity(
+	const std::string& name,
+	EntityID id,
+	const Position& pos,
+	const UnitParams& params,
+	std::shared_ptr<IWorldContext> sharedWorldCtx)
 {
+	const EntityFactory* factory = getEntityFactoryRegistry().getFactory(name);
+	if (!factory)
+	{
+		return EntityHandle();
+	}
 
-}
+	std::unique_ptr<Entity> entity = factory->create(sharedWorldCtx, id, pos, params);
+	if (!entity)
+	{
+		return EntityHandle();
+	}
 
-EntityManager::~EntityManager()
-{
-
-}
-
-EntityHandle EntityManager::createEntity(const std::string& name, EntityID id, const Position &pos, const UnitParams &params, std::shared_ptr<IWorldContext> sharedWorldCtx)
-{
-    const EntityFactory* factory = getEntityFactoryRegistry().getFactory(name);
-    if (!factory)
-    {
-        return EntityHandle();
-    }
-
-    std::unique_ptr<Entity> entity = factory->create(sharedWorldCtx, id, pos, params);
-    if (!entity)
-    {
-        return EntityHandle();
-    }
-
-    _units.emplace(id, std::move(entity));
-    return EntityHandle(shared_from_this(), id);
+	_units.emplace(id, std::move(entity));
+	return EntityHandle(shared_from_this(), id);
 }
 
 std::shared_ptr<EntityManager> EntityManager::create()
 {
-    return EnableMakeShared<EntityManager>::createSharedPtrInternal();
+	return EnableMakeShared<EntityManager>::createSharedPtrInternal();
 }
 
 EntityHandle EntityManager::getEntityByID(EntityID id) const
 {
-    if (_units.find(id) != _units.end())
-    {
-        return EntityHandle(shared_from_this(), id);
-    }
-    return EntityHandle();
+	if (_units.find(id) != _units.end())
+	{
+		return EntityHandle(shared_from_this(), id);
+	}
+	return EntityHandle();
 }
 
 Entity* EntityManager::resolveHandle(EntityHandle entityHandle) const
 {
-    if (entityHandle.getId() == 0)
-    {
-        return nullptr;
-    }
-    auto it = _units.find(entityHandle.getId());
-    return (it != _units.end()) ? it->second.get() : nullptr;
+	if (entityHandle.getId() == 0)
+	{
+		return nullptr;
+	}
+	auto it = _units.find(entityHandle.getId());
+	return (it != _units.end()) ? it->second.get() : nullptr;
 }
 
 bool EntityManager::updateEntityPosition(EntityID id, const Position& pos)
 {
-    auto it = _units.find(id);
-    if (it != _units.end())
-    {
-        auto& entity = it->second;
-        if(entity)
-        {
-            entity->setPosition(pos);
-            return true;
-        }
-    }
-    return false;
+	auto it = _units.find(id);
+	if (it != _units.end())
+	{
+		auto& entity = it->second;
+		if (entity)
+		{
+			entity->setPosition(pos);
+			return true;
+		}
+	}
+	return false;
 }
 
 bool EntityManager::updateEntityPosition(EntityHandle handle, const Position& pos)
 {
-    return updateEntityPosition(handle.getId(), pos);
+	return updateEntityPosition(handle.getId(), pos);
 }
 
 bool EntityManager::isValid(EntityHandle handle) const
 {
-    if (const auto* e = resolveHandle(handle))
-    {
-        return e->isAlive();
-    }
+	if (const auto* e = resolveHandle(handle))
+	{
+		return e->isAlive();
+	}
 
-    return false;
+	return false;
 }
 
-EntityFactoryRegistry &EntityManager::getEntityFactoryRegistry()
+EntityFactoryRegistry& EntityManager::getEntityFactoryRegistry()
 {
-    return _factoryRegistry;
+	return _factoryRegistry;
 }
 
-const EntityFactoryRegistry &EntityManager::getEntityFactoryRegistry() const
+const EntityFactoryRegistry& EntityManager::getEntityFactoryRegistry() const
 {
-    return _factoryRegistry;
+	return _factoryRegistry;
 }
 
 std::shared_ptr<EntityManager> EntityManager::getSharedData()
 {
-    return shared_from_this();
+	return shared_from_this();
 }
 
 std::vector<EntityID> EntityManager::getNeighboursInRadius(Position start, Predicate condition) const
 {
-    std::vector<EntityID> result;
-    for (const auto& [id, entity] : _units)
-    {
-        if (condition(entity, start))
-        {
-            result.push_back(id);
-        }
-    }
+	std::vector<EntityID> result;
+	for (const auto& [id, entity] : _units)
+	{
+		if (condition(entity, start))
+		{
+			result.push_back(id);
+		}
+	}
 
-    return result;
+	return result;
 }
 
 std::vector<EntityHandle> EntityManager::getAllEntities(
-    const std::function<bool(const std::unique_ptr<Entity>&)>& predicate) const
+	const std::function<bool(const std::unique_ptr<Entity>&)>& predicate) const
 {
-    std::vector<EntityHandle> result;
-    auto self = shared_from_this();
+	std::vector<EntityHandle> result;
+	auto self = shared_from_this();
 
-    for (const auto& [id, entity] : _units)
-    {
-        if (entity && predicate(entity))
-        {
-            result.emplace_back(self, id);
-        }
-    }
+	for (const auto& [id, entity] : _units)
+	{
+		if (entity && predicate(entity))
+		{
+			result.emplace_back(self, id);
+		}
+	}
 
-    return result;
+	return result;
 }

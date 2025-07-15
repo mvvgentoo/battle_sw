@@ -1,51 +1,48 @@
 #ifndef INAVIGATIONSERVICE_HPP
 #define INAVIGATIONSERVICE_HPP
 
+#include "Core/Entity/EntityHandle.hpp"
 #include "IGameService.hpp"
 
-#include <memory>
-
-#include "Core/Entity/EntityHandle.hpp"
-
 #include <list>
+#include <memory>
 
 class IWorldContext;
 class INavigationTask;
 class IMovementBehavior;
 
-
 class NavigationService : public IGameService
 {
 public:
-    enum class NavTaskStatus
-    {
-        Exists,
-        NewAssigned,
-        NoTask
-    };
+	enum class NavTaskStatus
+	{
+		Exists,
+		NewAssigned,
+		NoTask
+	};
 
-
-    NavigationService(std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv);
+	NavigationService(
+		std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv);
 	~NavigationService();
 
-    void addNavTask(std::unique_ptr<INavigationTask> navTask);
-    NavTaskStatus setCurrentNavTask();
-    bool hasCurrentNavTask();
+	void addNavTask(std::unique_ptr<INavigationTask> navTask);
+	NavTaskStatus setCurrentNavTask();
+	bool hasCurrentNavTask();
 
-    ITurnBehavior::TurnStatus update() override;
+	ITurnBehavior::TurnStatus update() override;
 
 private:
 	EntityHandle _owner;
-    std::weak_ptr<IWorldContext> _worldContext;
+	std::weak_ptr<IWorldContext> _worldContext;
 
-    std::list<std::unique_ptr<INavigationTask>> _navTasks;
-    std::unique_ptr<INavigationTask> _currentTask;
-    std::unique_ptr<IMovementBehavior> _moveBehavior;
-    int _priority = 50;
+	std::list<std::unique_ptr<INavigationTask>> _navTasks;
+	std::unique_ptr<INavigationTask> _currentTask;
+	std::unique_ptr<IMovementBehavior> _moveBehavior;
+	int _priority = 50;
 
 public:
-    int getPriority() const override;
-    void setPriority(int priority) override;
+	int getPriority() const override;
+	void setPriority(int priority) override;
 };
 
 #endif	// INAVIGATIONSERVICE_HPP

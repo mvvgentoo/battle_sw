@@ -1,17 +1,18 @@
 #include "Game/GameRuntime.hpp"
+
 #include "Core/AI/DefaultTurnBehavior.hpp"
 
 #include <Core/Entity/Entity.hpp>
-#include <Core/Systems/EventBus.hpp>
+#include <Core/FightSystem/CombatSystem.hpp>
+#include <Core/Navigation/NavigationTask.hpp>
+#include <Core/Services/INavigationService.hpp>
 #include <Core/Systems/EntityManager.hpp>
+#include <Core/Systems/EventBus.hpp>
 #include <Core/Systems/EventManager.hpp>
 #include <Core/Systems/NavGridSystem.hpp>
-#include <Core/FightSystem/CombatSystem.hpp>
-#include <Core/Services/INavigationService.hpp>
-#include <Core/Navigation/NavigationTask.hpp>
-#include <Core/World/World.hpp>
 #include <Core/World/EntityHelper.hpp>
 #include <Core/World/Simulator.hpp>
+#include <Core/World/World.hpp>
 #include <Features/FactoryMethods/HunterFactory.hpp>
 #include <Features/FactoryMethods/SwordsmanFactory.hpp>
 #include <IO/Commands/CreateMap.hpp>
@@ -30,10 +31,11 @@
 #include <IO/System/PrintDebug.hpp>
 
 GameRuntime::GameRuntime() :
-        _eventBus(std::make_shared<EventBus>()), _world()
+		_eventBus(std::make_shared<EventBus>()),
+		_world()
 {
-    auto turnBhv = std::make_unique<DefaultTurnBehavior>();
-    _simulator = std::make_shared<Simulator>(std::move(turnBhv));
+	auto turnBhv = std::make_unique<DefaultTurnBehavior>();
+	_simulator = std::make_shared<Simulator>(std::move(turnBhv));
 }
 
 GameRuntime::~GameRuntime() {}
@@ -70,18 +72,19 @@ void GameRuntime::registerCommands()
 	_parser
 		.add<io::CreateMap>(
 			[&](const io::CreateMap& cmd)
-            {
-                auto cs = std::make_shared<CombatSystem>();
-                auto em = EntityManager::create();
-                auto eventManager =std::make_shared<EventManager>(_eventBus, _simulator);
-                auto navGrid = std::make_shared<NavGridSystem>(cmd.width, cmd.height);
-                _world = World::create(navGrid, em, cs, eventManager);
+			{
+				auto cs = std::make_shared<CombatSystem>();
+				auto em = EntityManager::create();
+				auto eventManager = std::make_shared<EventManager>(_eventBus, _simulator);
+				auto navGrid = std::make_shared<NavGridSystem>(cmd.width, cmd.height);
+				_world = World::create(navGrid, em, cs, eventManager);
 				const int swordmanMeleeRange = 1;
 				const int swordsmanDefaultHP = 5;
 				const int swordsmanDefaultStrength = 2;
 				auto Swordsmanfactory = std::make_unique<SwordsmanFactory>(
 					swordsmanDefaultHP, swordmanMeleeRange, swordsmanDefaultStrength);
-                _world->getEntityManager().getEntityFactoryRegistry().registerFactory("Swordsman", std::move(Swordsmanfactory));
+				_world->getEntityManager().getEntityFactoryRegistry().registerFactory(
+					"Swordsman", std::move(Swordsmanfactory));
 
 				const int hunterMeleeRange = 1;
 				const int hunterMinRange = 2;
@@ -96,8 +99,9 @@ void GameRuntime::registerCommands()
 					hunterMeleeRange,
 					hunterDefaultAgility,
 					hunterDefaultStrength);
-                _world->getEntityManager().getEntityFactoryRegistry().registerFactory("Hunter", std::move(hunterFactory));
-                _world->getEventManager().emit(io::MapCreated{cmd.width, cmd.height});
+				_world->getEntityManager().getEntityFactoryRegistry().registerFactory(
+					"Hunter", std::move(hunterFactory));
+				_world->getEventManager().emit(io::MapCreated{cmd.width, cmd.height});
 			})
 		.add<io::SpawnSwordsman>(
 			[&](const io::SpawnSwordsman& cmd)
@@ -107,9 +111,10 @@ void GameRuntime::registerCommands()
 					UnitParams params;
 					params.set("hp", static_cast<int>(cmd.hp));
 					params.set("strength", static_cast<int>(cmd.strength));
-                    auto unitType = "Swordsman";
-                    EntityHelper::createEntity(*_world, unitType, cmd.unitId, {static_cast<int>(cmd.x), static_cast<int>(cmd.y)}, params);
-                    _world->getEventManager().emit(io::UnitSpawned{cmd.unitId, unitType, cmd.x, cmd.y});
+					auto unitType = "Swordsman";
+					EntityHelper::createEntity(
+						*_world, unitType, cmd.unitId, {static_cast<int>(cmd.x), static_cast<int>(cmd.y)}, params);
+					_world->getEventManager().emit(io::UnitSpawned{cmd.unitId, unitType, cmd.x, cmd.y});
 				}
 			})
 		.add<io::SpawnHunter>(
@@ -124,9 +129,9 @@ void GameRuntime::registerCommands()
 					params.set("agility", static_cast<int>(cmd.agility));
 
 					auto unitType = "Hunter";
-                    EntityHelper::createEntity(*_world,
-						unitType, cmd.unitId, {static_cast<int>(cmd.x), static_cast<int>(cmd.y)}, params);
-                    _world->getEventManager().emit(io::UnitSpawned{cmd.unitId, unitType, cmd.x, cmd.y});
+					EntityHelper::createEntity(
+						*_world, unitType, cmd.unitId, {static_cast<int>(cmd.x), static_cast<int>(cmd.y)}, params);
+					_world->getEventManager().emit(io::UnitSpawned{cmd.unitId, unitType, cmd.x, cmd.y});
 				}
 			})
 		.add<io::March>(
@@ -134,7 +139,7 @@ void GameRuntime::registerCommands()
 			{
 				if (_world)
 				{
-                    auto entityHandle = _world->getEntityManager().getEntityByID(cmd.unitId);
+					auto entityHandle = _world->getEntityManager().getEntityByID(cmd.unitId);
 					if (auto entity = entityHandle.lock())
 					{
 						if (auto nav = entity->getServiceByType<NavigationService>())
@@ -161,20 +166,19 @@ void GameRuntime::runScenario(uint64_t maxSteps)
 		return;
 	}
 
-    auto result = _simulator->advance(_world, maxSteps);
+	auto result = _simulator->advance(_world, maxSteps);
 
-    switch (result)
-    {
-    case Simulator::SimulatorResult::ONE_OR_LESS_LEFT:
-        std::cout << "Simulation ended: 1 or 0 units remain." << std::endl;
-        break;
-    case Simulator::SimulatorResult::NO_ACTED:
-        std::cout << "Simulation ended: no units acted at step " << _simulator->currentStep() << std::endl;
-        break;
-    case Simulator::SimulatorResult::REACH_MAX_STEPS:
-        std::cout << "Simulation ended: reached max steps" << std::endl;
-        break;
-    default:
-        break;
-    }
+	switch (result)
+	{
+		case Simulator::SimulatorResult::ONE_OR_LESS_LEFT:
+			std::cout << "Simulation ended: 1 or 0 units remain." << std::endl;
+			break;
+		case Simulator::SimulatorResult::NO_ACTED:
+			std::cout << "Simulation ended: no units acted at step " << _simulator->currentStep() << std::endl;
+			break;
+		case Simulator::SimulatorResult::REACH_MAX_STEPS:
+			std::cout << "Simulation ended: reached max steps" << std::endl;
+			break;
+		default: break;
+	}
 }

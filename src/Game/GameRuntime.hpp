@@ -25,8 +25,8 @@ public:
 
 private:
 	std::shared_ptr<EventBus> _eventBus;
-    std::shared_ptr<World> _world;
-    std::shared_ptr<Simulator> _simulator;
+	std::shared_ptr<World> _world;
+	std::shared_ptr<Simulator> _simulator;
 	sw::io::CommandParser _parser;
 	sw::EventLog _eventLog;
 };

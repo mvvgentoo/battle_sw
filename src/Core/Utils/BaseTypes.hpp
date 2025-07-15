@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <cstdint>
 
-
 struct Position
 {
 	using _type = int;
@@ -27,11 +26,10 @@ enum CellFlag
 	SHARE
 };
 
-inline uint32_t chebyshevDistance(const Position &a, const Position &b)
+inline uint32_t chebyshevDistance(const Position& a, const Position& b)
 {
-    return std::max((a.x > b.x ? a.x - b.x : b.x - a.x), (a.y > b.y ? a.y - b.y : b.y - a.y));
+	return std::max((a.x > b.x ? a.x - b.x : b.x - a.x), (a.y > b.y ? a.y - b.y : b.y - a.y));
 }
-
 
 using EntityID = uint32_t;
 

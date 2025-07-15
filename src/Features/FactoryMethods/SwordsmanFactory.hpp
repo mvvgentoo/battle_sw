@@ -13,7 +13,10 @@ public:
 	SwordsmanFactory(int hp, int meleeRange, int damage);
 	~SwordsmanFactory() = default;
 	std::unique_ptr<Entity> create(
-        std::shared_ptr<IWorldContext> worldContext, EntityID id, Position pos, const UnitParams& params) const override;
+		std::shared_ptr<IWorldContext> worldContext,
+		EntityID id,
+		Position pos,
+		const UnitParams& params) const override;
 
 private:
 	int _hp;

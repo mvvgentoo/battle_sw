@@ -5,14 +5,15 @@
 
 struct HealthComponent : public IDataComponent
 {
-    int hpMax = 10;
-    int currentHP = 1;
-    bool isDead = false;
+	int hpMax = 10;
+	int currentHP = 1;
+	bool isDead = false;
 
-    HealthComponent(int hpMax_, bool isDead_ = false) : hpMax(hpMax_), currentHP(hpMax_), isDead(isDead_)
-    {
-
-    }
+	HealthComponent(int hpMax_, bool isDead_ = false) :
+			hpMax(hpMax_),
+			currentHP(hpMax_),
+			isDead(isDead_)
+	{}
 };
 
-#endif // HEALTHCOMPONENT_HPP
+#endif	// HEALTHCOMPONENT_HPP

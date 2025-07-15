@@ -58,16 +58,16 @@ public:
 		return result;
 	}
 
-    std::vector<std::shared_ptr<ComponentType>> getAllComponents() const
-    {
-        std::vector<std::shared_ptr<ComponentType>> result;
-        result.reserve(_components.size());
-        for (const auto& [_, comp] : _components)
-        {
-            result.push_back(comp);
-        }
-        return result;
-    }
+	std::vector<std::shared_ptr<ComponentType>> getAllComponents() const
+	{
+		std::vector<std::shared_ptr<ComponentType>> result;
+		result.reserve(_components.size());
+		for (const auto& [_, comp] : _components)
+		{
+			result.push_back(comp);
+		}
+		return result;
+	}
 
 private:
 	using hash_type = std::type_index;

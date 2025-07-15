@@ -1,6 +1,5 @@
 #include "NavigationTask.hpp"
 
-
 NavigationTask::NavigationTask(Position target, uint32_t reachDistance) :
 		_target(target),
 		_reachDistance(reachDistance)
@@ -8,5 +7,5 @@ NavigationTask::NavigationTask(Position target, uint32_t reachDistance) :
 
 bool NavigationTask::isReached(const Position& current) const
 {
-    return chebyshevDistance(current, _target) < _reachDistance;
+	return chebyshevDistance(current, _target) < _reachDistance;
 }

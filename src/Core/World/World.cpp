@@ -1,73 +1,79 @@
 #include "World.hpp"
 
-#include "Core/Systems/EntityManager.hpp"
-#include "Core/Systems/NavGridSystem.hpp"
 #include "Core/FightSystem/CombatSystem.hpp"
+#include "Core/Systems/EntityManager.hpp"
 #include "Core/Systems/EventManager.hpp"
+#include "Core/Systems/NavGridSystem.hpp"
 #include "Core/Utils/EnableMakeShared.hpp"
 
 #include <memory>
 
-World::World(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
-             std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager) :
-    _navGrid(navGrid), _entityManager(entityManager), _combatSystem(combatSystem), _eventManager(eventManager)
-{
+World::World(
+	std::shared_ptr<NavGridSystem> navGrid,
+	std::shared_ptr<EntityManager> entityManager,
+	std::shared_ptr<CombatSystem> combatSystem,
+	std::shared_ptr<EventManager> eventManager) :
+		_navGrid(navGrid),
+		_entityManager(entityManager),
+		_combatSystem(combatSystem),
+		_eventManager(eventManager)
+{}
 
+std::shared_ptr<World> World::create(
+	std::shared_ptr<NavGridSystem> navGrid,
+	std::shared_ptr<EntityManager> entityManager,
+	std::shared_ptr<CombatSystem> combatSystem,
+	std::shared_ptr<EventManager> eventManager)
+{
+	auto result = EnableMakeShared<World>::createSharedPtrInternal(navGrid, entityManager, combatSystem, eventManager);
+	if (combatSystem)
+	{
+		combatSystem->setContext(result);
+	}
+	return result;
 }
 
-std::shared_ptr<World> World::create(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
-                                     std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager)
+const NavGridSystem& World::getGrid() const
 {
-    auto result = EnableMakeShared<World>::createSharedPtrInternal(navGrid,entityManager, combatSystem, eventManager);
-    if(combatSystem)
-    {
-        combatSystem->setContext(result);
-    }
-    return result;
+	return *_navGrid;
 }
 
-const NavGridSystem &World::getGrid() const
+NavGridSystem& World::getGrid()
 {
-    return *_navGrid;
+	return *_navGrid;
 }
 
-NavGridSystem &World::getGrid()
+const EntityManager& World::getEntityManager() const
 {
-    return *_navGrid;
+	return *_entityManager;
 }
 
-const EntityManager &World::getEntityManager() const
+EntityManager& World::getEntityManager()
 {
-    return *_entityManager;
+	return *_entityManager;
 }
 
-EntityManager &World::getEntityManager()
+const CombatSystem& World::getCombatSystem() const
 {
-    return *_entityManager;
+	return *_combatSystem;
 }
 
-const CombatSystem &World::getCombatSystem() const
+CombatSystem& World::getCombatSystem()
 {
-    return *_combatSystem;
+	return *_combatSystem;
 }
 
-CombatSystem &World::getCombatSystem()
+const EventManager& World::getEventManager() const
 {
-    return *_combatSystem;
+	return *_eventManager;
 }
 
-const EventManager &World::getEventManager() const
+EventManager& World::getEventManager()
 {
-    return *_eventManager;
-}
-
-EventManager &World::getEventManager()
-{
-    return *_eventManager;
+	return *_eventManager;
 }
 
 std::shared_ptr<IWorldContext> World::getSharedContext()
 {
-    return shared_from_this();
+	return shared_from_this();
 }
-

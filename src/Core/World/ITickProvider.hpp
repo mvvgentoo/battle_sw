@@ -6,8 +6,8 @@
 class ITickProvider
 {
 public:
-    virtual ~ITickProvider() = default;
-    virtual uint32_t currentStep() const = 0;
+	virtual ~ITickProvider() = default;
+	virtual uint32_t currentStep() const = 0;
 };
 
-#endif // ITICKPROVIDER_HPP
+#endif	// ITICKPROVIDER_HPP

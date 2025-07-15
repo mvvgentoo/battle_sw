@@ -1,31 +1,32 @@
 #ifndef COMBATSYSTEM_HPP
 #define COMBATSYSTEM_HPP
 
-#include <memory>
 #include "Core/Utils/BaseTypes.hpp"
+
+#include <memory>
 
 class IWorldContext;
 
 struct DamageEvent
 {
-    EntityID attacker;
-    EntityID target;
-    int damage;
+	EntityID attacker;
+	EntityID target;
+	int damage;
 };
 
 class CombatSystem
 {
 public:
-    CombatSystem();
-    CombatSystem(std::shared_ptr<IWorldContext> worldCtx);
-    ~CombatSystem();
+	CombatSystem();
+	CombatSystem(std::shared_ptr<IWorldContext> worldCtx);
+	~CombatSystem();
 
-    void setContext(std::shared_ptr<IWorldContext> worldCtx);
+	void setContext(std::shared_ptr<IWorldContext> worldCtx);
 
-    void dealDamageNow(const DamageEvent& evt);
+	void dealDamageNow(const DamageEvent& evt);
+
 private:
-    std::weak_ptr<IWorldContext> _worldContext;
+	std::weak_ptr<IWorldContext> _worldContext;
 };
 
-
-#endif // COMBATSYSTEM_HPP
+#endif	// COMBATSYSTEM_HPP

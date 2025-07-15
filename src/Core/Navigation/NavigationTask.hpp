@@ -10,12 +10,12 @@ public:
 
 	virtual ~NavigationTask() = default;
 
-    const Position& getTarget() const override
+	const Position& getTarget() const override
 	{
 		return _target;
 	}
 
-    virtual bool isReached(const Position& current) const override;
+	virtual bool isReached(const Position& current) const override;
 
 private:
 	Position _target;

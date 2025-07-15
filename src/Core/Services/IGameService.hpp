@@ -17,9 +17,9 @@ public:
 
 	IGameService();
 	virtual ~IGameService();
-    virtual ITurnBehavior::TurnStatus update() = 0;
-    virtual int getPriority() const = 0;
-    virtual void setPriority(int priority) = 0;
+	virtual ITurnBehavior::TurnStatus update() = 0;
+	virtual int getPriority() const = 0;
+	virtual void setPriority(int priority) = 0;
 };
 
 #endif	// IGAMESERVICE_HPP

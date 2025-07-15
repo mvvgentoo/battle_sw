@@ -1,6 +1,3 @@
 #include "IDataComponent.hpp"
 
-IDataComponent::~IDataComponent()
-{
-
-}
+IDataComponent::~IDataComponent() {}
