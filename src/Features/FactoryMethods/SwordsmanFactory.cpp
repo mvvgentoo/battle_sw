@@ -31,7 +31,7 @@ std::unique_ptr<Entity> SwordsmanFactory::create(
 
 	// Health Service
 	auto healthData = std::make_shared<HealthComponent>(hp);
-	auto healthSrv = std::make_shared<HealthService>(id, worldContext, healthData);
+    auto healthSrv = std::make_shared<HealthService>(id, worldContext);
 
 	entity->addComponent<HealthComponent>(healthData);
 	entity->addService<HealthService>(healthSrv);
@@ -41,7 +41,7 @@ std::unique_ptr<Entity> SwordsmanFactory::create(
 	auto meleeAttackData = std::make_shared<MeleeAttackData>(strength, meleeRange, targetSelector);
 
 	auto fightSrv = std::make_shared<FightService>(worldContext, id);
-	fightSrv->addAttackBehavior(std::make_unique<MeleeAttackBehavior>(meleeAttackData));
+    fightSrv->addAttackBehavior(std::make_unique<MeleeAttackBehavior>());
 
 	entity->addComponent<MeleeAttackData>(meleeAttackData);
 	entity->addService<FightService>(fightSrv);

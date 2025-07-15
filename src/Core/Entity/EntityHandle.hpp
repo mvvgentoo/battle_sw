@@ -14,7 +14,7 @@ public:
 	~EntityHandle();
 
 	EntityID getId() const;
-	Entity* lock();
+    Entity* lock() const;
 	bool isValid() const;
 
 private:

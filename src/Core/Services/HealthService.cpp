@@ -4,24 +4,55 @@
 #include "Core/Systems/EventManager.hpp"
 #include "Core/World/IWorldContext.hpp"
 #include "IO/Events/UnitDied.hpp"
+#include "Core/Systems/EntityManager.hpp"
 
 HealthService::HealthService(
-	EntityID owner, std::weak_ptr<IWorldContext> worldContext, std::shared_ptr<HealthComponent> healthData) :
+    EntityID owner, std::weak_ptr<IWorldContext> worldContext, int priority) :
 		_owner(owner),
-		_worldContext(worldContext),
-		_healthData(healthData)
-{}
+        _worldContext(worldContext),
+        _priority(priority)
+{
+    if(auto ctx = worldContext.lock())
+    {
+        _handle = EntityHandle(ctx->getEntityManager().getSharedData(), _owner);
+    }
+}
 
 HealthService::~HealthService() {}
 
 HealthService::hp_amount HealthService::getCurrentHP() const
 {
-	return _healthData ? _healthData->currentHP : 0;
+    if (auto entity = _handle.lock())
+    {
+        auto healthData = entity->getComponentByType<HealthComponent>();
+        return healthData ? healthData->currentHP : 0;
+    }
+
+    return 0;
 }
 
 bool HealthService::isAlive() const
 {
-	return _healthData && !_healthData->isDead && _healthData->currentHP > 0;
+    if (auto entity = _handle.lock())
+    {
+        auto healthData = entity->getComponentByType<HealthComponent>();
+        return healthData && !healthData->isDead && healthData->currentHP > 0;
+    }
+
+    return true;
+}
+
+static void markDead(HealthComponent* healthData, EntityID id, std::weak_ptr<IWorldContext> worldContext)
+{
+    if (healthData && !healthData->isDead)
+    {
+        healthData->isDead = true;
+
+        if (auto worldCtx = worldContext.lock())
+        {
+            worldCtx->getEventManager().emit(sw::io::UnitDied{id});
+        }
+    }
 }
 
 bool HealthService::applyDamage(hp_amount amount)
@@ -31,12 +62,18 @@ bool HealthService::applyDamage(hp_amount amount)
 		return false;
 	}
 
-	_healthData->currentHP = std::max(0, _healthData->currentHP - amount);
-	if (_healthData->currentHP == 0)
-	{
-		markDead();
-	}
-	return true;
+    if (auto entity = _handle.lock())
+    {
+        auto healthData = entity->getComponentByType<HealthComponent>();
+        healthData->currentHP = std::max(0, healthData->currentHP - amount);
+        if (healthData->currentHP == 0)
+        {
+            markDead(healthData.get(), _owner, _worldContext);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 bool HealthService::applyHeal(hp_amount amount)
@@ -46,26 +83,20 @@ bool HealthService::applyHeal(hp_amount amount)
 		return false;
 	}
 
-	_healthData->currentHP = std::min(_healthData->hpMax, _healthData->currentHP + amount);
-	return true;
+    if (auto entity = _handle.lock())
+    {
+        auto healthData = entity->getComponentByType<HealthComponent>();
+        healthData->currentHP = std::min(healthData->hpMax, healthData->currentHP + amount);
+
+        return true;
+    }
+
+    return false;
 }
 
 ITurnBehavior::TurnStatus HealthService::update()
 {
 	return ITurnBehavior::TurnStatus::IDLE;
-}
-
-void HealthService::markDead()
-{
-	if (_healthData && !_healthData->isDead)
-	{
-		_healthData->isDead = true;
-
-		if (auto worldCtx = _worldContext.lock())
-		{
-			worldCtx->getEventManager().emit(sw::io::UnitDied{_owner});
-		}
-	}
 }
 
 int HealthService::getPriority() const

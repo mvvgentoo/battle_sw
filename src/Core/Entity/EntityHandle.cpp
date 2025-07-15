@@ -19,7 +19,7 @@ EntityID EntityHandle::getId() const
 	return _id;
 }
 
-Entity* EntityHandle::lock()
+Entity* EntityHandle::lock() const
 {
 	if (auto em = _entityManager.lock())
 	{

@@ -1,6 +1,7 @@
 #ifndef HEALTHSERVICE_HPP
 #define HEALTHSERVICE_HPP
 
+#include "Core/Entity/EntityHandle.hpp"
 #include "Core/Utils/BaseTypes.hpp"
 #include "IGameService.hpp"
 
@@ -8,14 +9,14 @@
 #include <vector>
 
 class IWorldContext;
-class HealthComponent;
 
 class HealthService : public IGameService
 {
 public:
+    constexpr static int DefaultPriority = 0;
 	using hp_amount = int;
 
-	HealthService(EntityID _owner, std::weak_ptr<IWorldContext> worldContext, std::shared_ptr<HealthComponent> hpdata);
+    HealthService(EntityID _owner, std::weak_ptr<IWorldContext> worldContext, int priority = DefaultPriority);
 	virtual ~HealthService();
 
 	HealthService(const HealthService&) = delete;
@@ -32,14 +33,10 @@ public:
 	ITurnBehavior::TurnStatus update() override;
 
 private:
-	EntityID _owner;
-	std::weak_ptr<IWorldContext> _worldContext;
-	std::shared_ptr<HealthComponent> _healthData;
-	int _priority = 0;
-
-	void markDead();
-
-	// IGameService interface
+	EntityID _owner;    
+    std::weak_ptr<IWorldContext> _worldContext;
+    int _priority;
+    EntityHandle _handle;
 
 public:
 	int getPriority() const override;
