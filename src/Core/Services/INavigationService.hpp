@@ -21,8 +21,9 @@ public:
 		NoTask
 	};
 
+    constexpr static int DefaultPriority = 50;
 	NavigationService(
-		std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv);
+        std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv, int priority = DefaultPriority);
 	~NavigationService();
 
 	void addNavTask(std::unique_ptr<INavigationTask> navTask);
@@ -32,13 +33,13 @@ public:
 	ITurnBehavior::TurnStatus update() override;
 
 private:
-	EntityHandle _owner;
-	std::weak_ptr<IWorldContext> _worldContext;
+    std::weak_ptr<IWorldContext> _worldContext;
+    EntityHandle _owner;
+    std::unique_ptr<IMovementBehavior> _moveBehavior;
+    int _priority;
 
 	std::list<std::unique_ptr<INavigationTask>> _navTasks;
 	std::unique_ptr<INavigationTask> _currentTask;
-	std::unique_ptr<IMovementBehavior> _moveBehavior;
-	int _priority = 50;
 
 public:
 	int getPriority() const override;

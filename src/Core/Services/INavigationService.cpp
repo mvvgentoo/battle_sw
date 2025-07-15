@@ -9,10 +9,11 @@
 #include "IO/Events/UnitMoved.hpp"
 
 NavigationService::NavigationService(
-	std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv) :
-		_worldContext(worldCtx),
-		_owner(owner),
-		_moveBehavior(std::move(moveBhv))
+    std::shared_ptr<IWorldContext> worldCtx, EntityHandle owner, std::unique_ptr<IMovementBehavior> moveBhv, int priority) :
+        _worldContext(worldCtx),
+        _owner(owner),
+        _moveBehavior(std::move(moveBhv)),
+        _priority(priority)
 {}
 
 NavigationService::~NavigationService() = default;
