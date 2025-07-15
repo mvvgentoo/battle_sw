@@ -19,7 +19,7 @@ class CombatSystem
 public:
 	CombatSystem();
 	~CombatSystem();
-    void dealDamageNow(const DamageEvent& evt, const IWorldContext &worldCtx) const;
+	void dealDamageNow(const DamageEvent& evt, const IWorldContext& worldCtx) const;
 
 private:
 	std::weak_ptr<IWorldContext> _worldContext;

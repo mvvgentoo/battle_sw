@@ -15,17 +15,17 @@ CombatSystem::~CombatSystem() {}
 
 void CombatSystem::dealDamageNow(const DamageEvent& evt, const IWorldContext& worldCtx) const
 {
-    const auto& entityManager = worldCtx.getEntityManager();
-    if (auto targetEntity = entityManager.getEntityByID(evt.target).lock())
-    {
-        if (auto healthSrv = targetEntity->getServiceByType<HealthService>())
-        {
-            int hpBefore = healthSrv->getCurrentHP();
+	const auto& entityManager = worldCtx.getEntityManager();
+	if (auto targetEntity = entityManager.getEntityByID(evt.target).lock())
+	{
+		if (auto healthSrv = targetEntity->getServiceByType<HealthService>())
+		{
+			int hpBefore = healthSrv->getCurrentHP();
 
-            worldCtx.getEventManager().emit(sw::io::UnitAttacked{
-                    evt.attacker, evt.target, static_cast<uint32_t>(evt.damage), static_cast<uint32_t>(hpBefore)});
+			worldCtx.getEventManager().emit(sw::io::UnitAttacked{
+				evt.attacker, evt.target, static_cast<uint32_t>(evt.damage), static_cast<uint32_t>(hpBefore)});
 
-            healthSrv->applyDamage(evt.damage);
-        }
-    }
+			healthSrv->applyDamage(evt.damage);
+		}
+	}
 }

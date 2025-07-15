@@ -1,7 +1,6 @@
 #include "Game/GameRuntime.hpp"
 
 #include "Core/AI/DefaultTurnBehavior.hpp"
-
 #include "Core/Entity/Entity.hpp"
 #include "Core/FightSystem/CombatSystem.hpp"
 #include "Core/Navigation/NavigationTask.hpp"

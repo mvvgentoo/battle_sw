@@ -11,7 +11,7 @@ class IAttackBehavior;
 
 class FightService : public IGameService
 {
-public:
+public:    
 	FightService(std::shared_ptr<IWorldContext> worldContext, EntityID owner);
 	virtual ~FightService();
 
@@ -28,11 +28,7 @@ private:
 	EntityID _owner;
 	std::weak_ptr<IWorldContext> _worldContext;
 	std::vector<std::shared_ptr<IAttackBehavior>> _behaviors;
-
-	int _priority = 100;
-	//std::vector<EntityID> findTargetsFrom(const std::shared_ptr<IFightComponent>& component) const;
-
-	// IGameService interface
+    int _priority;
 
 public:
 	int getPriority() const override;

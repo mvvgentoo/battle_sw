@@ -13,10 +13,10 @@ class IWorldContext;
 class HealthService : public IGameService
 {
 public:
-    constexpr static int DefaultPriority = 0;
+	constexpr static int DefaultPriority = 0;
 	using hp_amount = int;
 
-    HealthService(std::weak_ptr<IWorldContext> worldContext, EntityID _owner, int priority = DefaultPriority);
+	HealthService(std::weak_ptr<IWorldContext> worldContext, EntityID _owner, int priority = DefaultPriority);
 	virtual ~HealthService();
 
 	HealthService(const HealthService&) = delete;
@@ -33,10 +33,10 @@ public:
 	ITurnBehavior::TurnStatus update() override;
 
 private:
-    std::weak_ptr<IWorldContext> _worldContext;
-    EntityID _owner;
-    int _priority;
-    EntityHandle _handle;
+	std::weak_ptr<IWorldContext> _worldContext;
+	EntityID _owner;
+	int _priority;
+	EntityHandle _handle;
 
 public:
 	int getPriority() const override;

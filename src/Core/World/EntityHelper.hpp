@@ -1,9 +1,8 @@
 #ifndef ENTITYHELPER_H
 #define ENTITYHELPER_H
 
-#include "Core/Factory/UnitParams.hpp"
-
 #include "Core/Entity/EntityHandle.hpp"
+#include "Core/Factory/UnitParams.hpp"
 
 class IWorldContext;
 class Position;

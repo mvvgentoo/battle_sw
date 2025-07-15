@@ -2,6 +2,7 @@
 #define HUNTER_FACTORY_HPP
 
 #include "Core/Factory/EntityFactory.hpp"
+
 #include <memory>
 
 class World;

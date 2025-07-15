@@ -3,6 +3,7 @@
 
 #include "Core/Entity/EntityHandle.hpp"
 #include "Core/Factory/EntityFactory.hpp"
+
 #include <memory>
 
 class World;
