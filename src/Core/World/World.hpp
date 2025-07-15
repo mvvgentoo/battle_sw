@@ -43,18 +43,9 @@ public:
 
     std::shared_ptr<IWorldContext> getSharedContext() override;
 
-private:
+protected:
     World(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
-                 std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager);
-
-    template<typename ...Arg>
-    std::shared_ptr<World> static createInternal(Arg&&...arg)
-    {
-        struct EnableMakeShared : public World {
-            EnableMakeShared(Arg&&...arg) :World(std::forward<Arg>(arg)...) {}
-        };
-        return std::make_shared<EnableMakeShared>(std::forward<Arg>(arg)...);
-    }
+                 std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager);    
 
 private:
     std::shared_ptr<NavGridSystem> _navGrid;

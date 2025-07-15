@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include "Core/Factory/EntityFactory.hpp"
 #include "Core/World/IWorldContext.hpp"
+#include "Core/Utils/EnableMakeShared.hpp"
 
 EntityManager::EntityManager()
 {
@@ -32,7 +33,7 @@ EntityHandle EntityManager::createEntity(const std::string& name, EntityID id, c
 
 std::shared_ptr<EntityManager> EntityManager::create()
 {
-    return createInternal();
+    return EnableMakeShared<EntityManager>::createSharedPtrInternal();
 }
 
 EntityHandle EntityManager::getEntityByID(EntityID id) const

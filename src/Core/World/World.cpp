@@ -4,6 +4,7 @@
 #include "Core/Systems/NavGridSystem.hpp"
 #include "Core/FightSystem/CombatSystem.hpp"
 #include "Core/Systems/EventManager.hpp"
+#include "Core/Utils/EnableMakeShared.hpp"
 
 #include <memory>
 
@@ -17,7 +18,7 @@ World::World(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManag
 std::shared_ptr<World> World::create(std::shared_ptr<NavGridSystem> navGrid, std::shared_ptr<EntityManager> entityManager,
                                      std::shared_ptr<CombatSystem> combatSystem, std::shared_ptr<EventManager> eventManager)
 {
-    auto result = createInternal(navGrid,entityManager, combatSystem, eventManager);
+    auto result = EnableMakeShared<World>::createSharedPtrInternal(navGrid,entityManager, combatSystem, eventManager);
     if(combatSystem)
     {
         combatSystem->setContext(result);

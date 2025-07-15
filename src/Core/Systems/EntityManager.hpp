@@ -50,18 +50,8 @@ private:
     //std::vector<EntityID> _unitsOrder;
     EntityFactoryRegistry _factoryRegistry;
 
-
+protected:
     EntityManager();
-
-    template<typename ...Arg>
-    std::shared_ptr<EntityManager> static createInternal(Arg&&...arg)
-    {
-        struct EnableMakeShared : public EntityManager {
-            EnableMakeShared(Arg&&...arg) :EntityManager(std::forward<Arg>(arg)...) {}
-        };
-        return std::make_shared<EnableMakeShared>(std::forward<Arg>(arg)...);
-    }
-
 };
 
 #endif // ENTITYMANAGER_HPP
